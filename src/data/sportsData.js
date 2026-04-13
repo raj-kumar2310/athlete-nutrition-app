@@ -1,368 +1,384 @@
+// ─── Complete Olympic Sports Data ─────────────────────────────
+// Aerobic = endurance-dominant | Anaerobic = power/strength-dominant
+
+const prePost = (preThreeHour, preOneHour, duringFoods, duringHydration, postFoods, postCal, postTiming = 'Within 30 min') => ({
+  preEvent: {
+    threeHour: { foods: preThreeHour.foods, calories: preThreeHour.cal, hydration: preThreeHour.hydration || '500ml water' },
+    oneHour:   { foods: preOneHour.foods,   calories: preOneHour.cal,   hydration: preOneHour.hydration  || '250ml sports drink' },
+  },
+  during: { foods: duringFoods, hydration: duringHydration },
+  postEvent: { foods: postFoods, calories: postCal, timing: postTiming },
+})
+
+// ─── AEROBIC SPORTS ────────────────────────────────────────────
 export const sportsData = {
   aerobic: [
+
+    // ── Athletics (Track) ───────────────────────────────────────
     {
-      id: 'marathon', name: 'Marathon', icon: '🏃', distance: '42.2km',
-      events: [{
-        id: 'full_marathon', name: 'Full Marathon (42.2km)',
-        preEvent: {
-          threeHour: { foods: ['Oatmeal with banana', 'Whole grain toast', 'Boiled eggs (2)', 'Orange juice'], calories: 600, hydration: '500ml water' },
-          oneHour: { foods: ['Energy banana', 'Energy gel', 'Sports drink'], calories: 200, hydration: '300ml sports drink' }
-        },
-        during: { foods: ['Energy gels every 45min', 'Sports drink every 20min', 'Banana at aid stations'], hydration: '150-200ml every 20min' },
-        postEvent: { foods: ['Chocolate milk', 'Rice with chicken', 'Sweet potato', 'Protein shake'], calories: 800, timing: 'Within 30 min' }
-      }]
-    },
-    {
-      id: 'running_5k', name: '5K / 10K Run', icon: '🏃‍♂️', distance: '5-10km',
+      id: 'athletics_track', name: 'Athletics – Track', icon: '🏃', type: 'Athletics',
       events: [
-        {
-          id: '5k', name: '5K Run',
-          preEvent: {
-            threeHour: { foods: ['Banana', 'Toast with peanut butter', 'Greek yogurt'], calories: 400, hydration: '400ml water' },
-            oneHour: { foods: ['Half banana', 'Small energy bar'], calories: 150, hydration: '200ml water' }
-          },
-          during: { foods: ['Water only for 5K', 'Sports drink if hot weather'], hydration: '100ml every 2km' },
-          postEvent: { foods: ['Protein shake', 'Fruit salad', 'Whole grain sandwich'], calories: 500, timing: 'Within 45 min' }
-        },
-        {
-          id: '10k', name: '10K Run',
-          preEvent: {
-            threeHour: { foods: ['Oatmeal', 'Banana', 'Toast', 'Eggs'], calories: 500, hydration: '500ml water' },
-            oneHour: { foods: ['Energy bar', 'Sports drink'], calories: 200, hydration: '250ml sports drink' }
-          },
-          during: { foods: ['Energy gel at 5km mark', 'Sports drink'], hydration: '150ml every 3km' },
-          postEvent: { foods: ['Rice + chicken', 'Protein shake', 'Coconut water'], calories: 650, timing: 'Within 30 min' }
-        }
+        { id: '100m',  name: '100 Metres',   ...prePost({ foods: ['White rice (200g)', 'Grilled chicken (150g)', 'Banana', 'Sports drink'], cal: 550, hydration: '400ml water' }, { foods: ['Banana', 'Energy gel', 'Creatine if used'], cal: 150 }, ['Water between heats', 'Glucose tabs'], 'Stay hydrated between rounds', ['Protein shake (30g)', 'Banana', 'Chocolate milk', 'Rice cakes'], 450) },
+        { id: '200m',  name: '200 Metres',   ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'OJ'], cal: 580 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 180 }, ['Sports drink between rounds'], '200ml between heats', ['Protein shake', 'Rice', 'Banana', 'Coconut water'], 500) },
+        { id: '400m',  name: '400 Metres',   ...prePost({ foods: ['Pasta (200g)', 'Chicken (150g)', 'Banana', 'Toast'], cal: 650 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 220 }, ['Sports drink between rounds'], '300ml between races', ['Protein shake', 'Pasta', 'Egg', 'Fruit'], 600) },
+        { id: '800m',  name: '800 Metres',   ...prePost({ foods: ['Rice (200g)', 'Salmon (150g)', 'Sweet potato', 'Banana'], cal: 620 }, { foods: ['Energy gel', 'Sports drink', 'Banana'], cal: 200 }, ['Sports drink between rounds'], '300ml between rounds', ['Recovery shake', 'Rice', 'Chicken', 'Fruit'], 600) },
+        { id: '1500m', name: '1500 Metres',  ...prePost({ foods: ['Pasta (250g)', 'Chicken', 'Salad', 'Banana', 'OJ'], cal: 700 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 220 }, ['Energy gel if heats', 'Sports drink'], '400ml per hour', ['Recovery shake', 'Pasta', 'Tuna', 'Coconut water'], 650) },
+        { id: '5000m', name: '5000 Metres',  ...prePost({ foods: ['Oatmeal (150g)', 'Banana (2)', 'Toast', 'Eggs (2)', 'OJ'], cal: 750 }, { foods: ['Energy gel', 'Sports drink', 'Dates'], cal: 250 }, ['Energy gels every 2km', 'Water at stations'], '400-500ml per hour', ['Pasta', 'Protein shake', 'Coconut water', 'Fruit'], 750) },
+        { id: '10000m',name: '10000 Metres', ...prePost({ foods: ['Pasta (300g)', 'Chicken', 'Banana (2)', 'Toast', 'OJ'], cal: 850 }, { foods: ['Energy gel (2)', 'Sports drink', 'Banana'], cal: 300 }, ['Gels every 3km', 'Sports drink at stations'], '500ml per hour', ['Pasta', 'Salmon', 'Recovery shake', 'Electrolytes'], 850) },
+        { id: 'marathon_track', name: 'Marathon (42.2km)', ...prePost({ foods: ['Oatmeal (200g)', 'Banana (2)', 'Toast', 'Eggs', 'Honey'], cal: 900 }, { foods: ['Energy gels (2)', 'Sports drink', 'Electrolyte tab'], cal: 350 }, ['Gel every 45min', 'Banana at stations', 'Sports drink 20min'], '600ml per hour', ['Recovery shake', 'Pasta', 'Salmon', 'Sweet potato'], 1000) },
+        { id: '110m_hurdles', name: '110m Hurdles', ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Banana', 'Sports drink'], cal: 560 }, { foods: ['Banana', 'Energy gel'], cal: 160 }, ['Water between heats'], 'Hydrate between rounds', ['Protein shake', 'Rice', 'Eggs'], 480) },
+        { id: '400m_hurdles', name: '400m Hurdles', ...prePost({ foods: ['Pasta (200g)', 'Chicken (150g)', 'Banana', 'Toast'], cal: 660 }, { foods: ['Energy gel', 'Sports drink'], cal: 200 }, ['Sports drink between rounds'], '300ml between races', ['Protein shake', 'Pasta', 'Fruit'], 580) },
+        { id: '3000m_steeple', name: '3000m Steeplechase', ...prePost({ foods: ['Pasta (250g)', 'Chicken', 'Banana (2)', 'OJ'], cal: 720 }, { foods: ['Energy gel', 'Sports drink', 'Banana'], cal: 240 }, ['Gels if multiple rounds', 'Sports drink'], '400ml per hour', ['Recovery shake', 'Pasta', 'Tuna', 'Coconut water'], 700) },
+        { id: '4x100m', name: '4×100m Relay', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 550 }, { foods: ['Energy gel', 'Banana'], cal: 150 }, ['Water between rounds', 'Glucose tabs'], 'Hydrate well', ['Protein shake', 'Banana', 'Rice', 'Chocolate milk'], 450) },
+        { id: '4x400m', name: '4×400m Relay', ...prePost({ foods: ['Pasta (200g)', 'Chicken', 'Banana (2)', 'Toast'], cal: 650 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 220 }, ['Sports drink between rounds'], '300ml per round', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 600) },
+        { id: '20km_walk', name: '20km Race Walk', ...prePost({ foods: ['Oatmeal', 'Banana (2)', 'Toast', 'Eggs', 'OJ'], cal: 800 }, { foods: ['Energy gel', 'Sports drink', 'Banana'], cal: 280 }, ['Gels every 5km', 'Sports drink every 2km'], '500ml per hour', ['Pasta', 'Recovery shake', 'Coconut water', 'Fruit'], 900) },
+        { id: '50km_walk', name: '50km Race Walk', ...prePost({ foods: ['Large pasta (350g)', 'Chicken', 'Banana (3)', 'Toast', 'OJ'], cal: 1100 }, { foods: ['Energy gels (3)', 'Sports drink', 'Banana'], cal: 400 }, ['Gel every 30min', 'Real food at stations', 'Sports drink continuously'], '700ml per hour', ['Large recovery meal', 'Pasta', 'Protein shake', 'Electrolytes'], 1200) },
       ]
     },
+
+    // ── Athletics (Road) ────────────────────────────────────────
     {
-      id: 'cycling', name: 'Road Cycling', icon: '🚴', distance: 'Various',
-      events: [{
-        id: 'road_race', name: 'Road Race (80-120km)',
-        preEvent: {
-          threeHour: { foods: ['Pasta with tomato sauce', 'Bread', 'Banana', 'Coffee'], calories: 700, hydration: '600ml water' },
-          oneHour: { foods: ['Rice cakes', 'Energy bar', 'Sports drink'], calories: 250, hydration: '300ml sports drink' }
-        },
-        during: { foods: ['Energy gels every 30min', 'Bananas', 'Rice balls', 'Sports drink'], hydration: '500-750ml per hour' },
-        postEvent: { foods: ['Pasta', 'Protein shake', 'Recovery drink', 'Salmon'], calories: 900, timing: 'Within 30 min' }
-      }]
-    },
-    {
-      id: 'swimming', name: 'Swimming', icon: '🏊', distance: 'Various',
+      id: 'athletics_road', name: 'Athletics – Road', icon: '🛣️', type: 'Athletics',
       events: [
-        {
-          id: 'swim_400m', name: '400M Freestyle',
-          preEvent: {
-            threeHour: { foods: ['Rice with vegetables', 'Chicken breast', 'Banana'], calories: 500, hydration: '400ml water' },
-            oneHour: { foods: ['Energy gel', 'Sports drink', 'Small banana'], calories: 180, hydration: '200ml water' }
-          },
-          during: { foods: ['N/A - too short'], hydration: 'Hydrate before' },
-          postEvent: { foods: ['Chocolate milk', 'Tuna sandwich', 'Fruit'], calories: 600, timing: 'Immediately after' }
-        }
+        { id: 'road_marathon', name: 'Road Marathon', ...prePost({ foods: ['Oatmeal (200g)', 'Banana (2)', 'Toast', 'Eggs', 'Coffee'], cal: 900 }, { foods: ['Energy gels (2)', 'Sports drink', 'Electrolyte tab'], cal: 350 }, ['Gel every 45min', 'Banana', 'Sports drink 20min'], '600ml per hour', ['Recovery shake', 'Pasta', 'Salmon', 'Sweet potato'], 1000) },
+        { id: 'road_half', name: 'Half Marathon', ...prePost({ foods: ['Pasta (250g)', 'Banana (2)', 'Toast', 'Eggs', 'OJ'], cal: 750 }, { foods: ['Energy gel', 'Sports drink', 'Banana'], cal: 250 }, ['Gel every 45min', 'Sports drink stations'], '500ml per hour', ['Pasta', 'Protein shake', 'Banana', 'Coconut water'], 800) },
+        { id: '10km_road', name: '10km Road Race', ...prePost({ foods: ['Oatmeal (150g)', 'Banana (2)', 'Toast', 'OJ'], cal: 650 }, { foods: ['Energy gel', 'Sports drink'], cal: 200 }, ['Water at aid stations'], '400ml per hour', ['Recovery shake', 'Pasta', 'Banana', 'Coconut water'], 700) },
       ]
     },
+
+    // ── Swimming ────────────────────────────────────────────────
     {
-      id: 'triathlon', name: 'Triathlon', icon: '🏅', distance: 'Various',
-      events: [{
-        id: 'olympic', name: 'Olympic Triathlon',
-        preEvent: {
-          threeHour: { foods: ['Large oatmeal', 'Eggs', 'Toast', 'Banana', 'Coffee'], calories: 750, hydration: '600ml water' },
-          oneHour: { foods: ['Energy gels (2)', 'Sports drink', 'Electrolyte tablet'], calories: 300, hydration: '400ml sports drink' }
-        },
-        during: { foods: ['Gels on bike every 20min', 'Sports drink throughout', 'Salt tabs if hot'], hydration: '600ml per hour' },
-        postEvent: { foods: ['Recovery shake', 'Pasta', 'Lean protein', 'Vegetables'], calories: 1000, timing: 'Within 20 min' }
-      }]
+      id: 'swimming', name: 'Swimming', icon: '🏊', type: 'Aquatics',
+      events: [
+        { id: 'swim_50m',     name: '50m Freestyle',    ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 550 }, { foods: ['Banana', 'Energy gel'], cal: 150 }, ['Water between heats'], 'Hydrate between rounds', ['Protein shake', 'Chocolate milk', 'Banana'], 450) },
+        { id: 'swim_100m',    name: '100m Freestyle',   ...prePost({ foods: ['Rice (200g)', 'Tuna (150g)', 'Banana', 'OJ'], cal: 580 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 180 }, ['Sports drink between heats'], '300ml between heats', ['Protein shake', 'Rice', 'Banana', 'Milk'], 500) },
+        { id: 'swim_200m',    name: '200m Freestyle',   ...prePost({ foods: ['Rice (200g)', 'Salmon (150g)', 'Sweet potato', 'Banana'], cal: 620 }, { foods: ['Energy gel', 'Sports drink'], cal: 200 }, ['Sports drink between rounds'], '300ml between rounds', ['Recovery shake', 'Rice', 'Chicken', 'Fruit'], 580) },
+        { id: 'swim_400m',    name: '400m Freestyle',   ...prePost({ foods: ['Pasta (250g)', 'Tuna (150g)', 'Banana', 'Toast'], cal: 680 }, { foods: ['Energy gel', 'Sports drink', 'Banana'], cal: 220 }, ['Sports drink between heats'], '400ml per hour', ['Recovery shake', 'Pasta', 'Tuna', 'Coconut water'], 650) },
+        { id: 'swim_800m',    name: '800m Freestyle',   ...prePost({ foods: ['Oatmeal (150g)', 'Banana (2)', 'Eggs (2)', 'OJ'], cal: 720 }, { foods: ['Energy gel', 'Sports drink', 'Banana'], cal: 240 }, ['Gels if needed', 'Sports drink'], '500ml per hour', ['Pasta', 'Recovery shake', 'Coconut water'], 700) },
+        { id: 'swim_1500m',   name: '1500m Freestyle',  ...prePost({ foods: ['Pasta (250g)', 'Chicken', 'Banana (2)', 'OJ'], cal: 780 }, { foods: ['Energy gel (2)', 'Sports drink', 'Banana'], cal: 280 }, ['Gels if needed', 'Sports drink'], '500ml per hour', ['Pasta', 'Salmon', 'Recovery shake', 'Electrolytes'], 800) },
+        { id: 'swim_100m_back', name: '100m Backstroke', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 560 }, { foods: ['Energy gel', 'Banana'], cal: 160 }, ['Water between heats'], 'Hydrate between rounds', ['Protein shake', 'Rice', 'Eggs'], 480) },
+        { id: 'swim_200m_back', name: '200m Backstroke', ...prePost({ foods: ['Rice (200g)', 'Salmon (150g)', 'Sweet potato', 'Banana'], cal: 620 }, { foods: ['Energy gel', 'Sports drink'], cal: 200 }, ['Sports drink between rounds'], '350ml between rounds', ['Recovery shake', 'Rice', 'Chicken', 'Fruit'], 580) },
+        { id: 'swim_100m_breast', name: '100m Breaststroke', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 560 }, { foods: ['Banana', 'Energy gel'], cal: 160 }, ['Water between heats'], 'Hydrate', ['Protein shake', 'Banana', 'Milk'], 480) },
+        { id: 'swim_200m_breast', name: '200m Breaststroke', ...prePost({ foods: ['Rice (200g)', 'Tuna (150g)', 'Sweet potato', 'Banana'], cal: 620 }, { foods: ['Energy gel', 'Sports drink'], cal: 200 }, ['Sports drink between rounds'], '350ml', ['Recovery shake', 'Pasta', 'Tuna'], 580) },
+        { id: 'swim_100m_fly', name: '100m Butterfly', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 560 }, { foods: ['Banana', 'Energy gel'], cal: 160 }, ['Water between heats'], 'Hydrate', ['Protein shake', 'Banana', 'Chocolate milk'], 480) },
+        { id: 'swim_200m_fly', name: '200m Butterfly', ...prePost({ foods: ['Pasta (200g)', 'Salmon (150g)', 'Sweet potato', 'Banana'], cal: 640 }, { foods: ['Energy gel', 'Sports drink'], cal: 210 }, ['Sports drink between rounds'], '400ml', ['Recovery shake', 'Pasta', 'Tuna', 'Coconut water'], 600) },
+        { id: 'swim_200m_im', name: '200m Individual Medley', ...prePost({ foods: ['Pasta (200g)', 'Chicken (150g)', 'Banana', 'OJ'], cal: 640 }, { foods: ['Energy gel', 'Sports drink'], cal: 210 }, ['Sports drink between rounds'], '400ml', ['Recovery shake', 'Rice', 'Chicken', 'Fruit'], 600) },
+        { id: 'swim_400m_im', name: '400m Individual Medley', ...prePost({ foods: ['Oatmeal (150g)', 'Banana (2)', 'Eggs (2)', 'OJ'], cal: 720 }, { foods: ['Energy gel (2)', 'Sports drink'], cal: 260 }, ['Gels if needed', 'Sports drink'], '500ml per hour', ['Pasta', 'Recovery shake', 'Coconut water', 'Fruit'], 720) },
+        { id: 'swim_4x100m_relay', name: '4×100m Relay', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 560 }, { foods: ['Energy gel', 'Banana'], cal: 160 }, ['Water between rounds'], 'Hydrate well', ['Protein shake', 'Rice', 'Banana'], 480) },
+        { id: 'swim_open_water', name: '10km Open Water', ...prePost({ foods: ['Oatmeal (200g)', 'Banana (2)', 'Toast', 'Eggs', 'OJ'], cal: 900 }, { foods: ['Energy gels (2)', 'Sports drink', 'Electrolyte tab'], cal: 350 }, ['Gel every 30min at feed stations', 'Sports drink', 'Electrolytes'], '600ml per hour', ['Recovery meal', 'Pasta', 'Protein shake', 'Electrolytes'], 1000) },
+      ]
     },
+
+    // ── Cycling ─────────────────────────────────────────────────
     {
-      id: 'rowing', name: 'Rowing', icon: '🚣', distance: '2000m',
-      events: [{
-        id: 'row_2k', name: '2000M Race',
-        preEvent: {
-          threeHour: { foods: ['Rice', 'Chicken', 'Sweet potato', 'Green vegetables'], calories: 600, hydration: '500ml water' },
-          oneHour: { foods: ['Banana', 'Energy bar'], calories: 200, hydration: '300ml water' }
-        },
-        during: { foods: ['Too short for food'], hydration: 'Pre-hydrate well' },
-        postEvent: { foods: ['Protein shake', 'Bagel with peanut butter', 'Fruit juice'], calories: 700, timing: 'Within 30 min' }
-      }]
-    }
+      id: 'cycling', name: 'Cycling', icon: '🚴', type: 'Cycling',
+      events: [
+        { id: 'road_race', name: 'Road Race (Individual)', ...prePost({ foods: ['Pasta (300g)', 'Chicken', 'Banana (2)', 'Bread', 'Coffee'], cal: 900 }, { foods: ['Rice cakes', 'Energy bar', 'Sports drink'], cal: 300 }, ['Gel every 30min', 'Bananas', 'Rice balls', 'Sports drink continuously'], '600-750ml per hour', ['Pasta', 'Recovery shake', 'Salmon', 'Sweet potato'], 1000) },
+        { id: 'road_itt', name: 'Individual Time Trial', ...prePost({ foods: ['Pasta (300g)', 'Chicken', 'Banana (2)', 'Coffee'], cal: 850 }, { foods: ['Energy gel (2)', 'Sports drink', 'Caffeine gel'], cal: 280 }, ['Gel at midpoint', 'Sports drink'], '500-600ml', ['Recovery shake', 'Pasta', 'Protein shake', 'Coconut water'], 900) },
+        { id: 'road_tt_team', name: 'Team Time Trial', ...prePost({ foods: ['Pasta (300g)', 'Chicken', 'Banana (2)', 'OJ'], cal: 850 }, { foods: ['Energy gel (2)', 'Sports drink'], cal: 260 }, ['Gel at halfway', 'Sports drink sips'], '500ml', ['Pasta', 'Recovery shake', 'Protein shake'], 900) },
+        { id: 'track_sprint', name: 'Track Sprint', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 600 }, { foods: ['Energy gel', 'Caffeine', 'Banana'], cal: 180 }, ['Water between rounds', 'Glucose tabs'], 'Hydrate between heats', ['Protein shake', 'Rice', 'Banana', 'Milk'], 500) },
+        { id: 'track_keirin', name: 'Keirin', ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Banana', 'Sports drink'], cal: 580 }, { foods: ['Energy gel', 'Caffeine tab', 'Banana'], cal: 170 }, ['Water + glucose between rounds'], 'Hydrate', ['Protein shake', 'Banana', 'Rice cakes'], 480) },
+        { id: 'track_madison', name: 'Madison', ...prePost({ foods: ['Pasta (280g)', 'Chicken', 'Banana (2)', 'OJ'], cal: 820 }, { foods: ['Energy gel (2)', 'Sports drink'], cal: 260 }, ['Gels during race', 'Sports drink'], '500ml per hour', ['Recovery shake', 'Pasta', 'Chicken', 'Coconut water'], 850) },
+        { id: 'track_omnium', name: 'Omnium', ...prePost({ foods: ['Pasta (280g)', 'Chicken', 'Banana (2)', 'OJ'], cal: 800 }, { foods: ['Energy gel (2)', 'Sports drink', 'Caffeine'], cal: 270 }, ['Gels between events', 'Sports drink'], '500ml per hour', ['Recovery shake', 'Pasta', 'Tuna', 'Fruit'], 850) },
+        { id: 'track_4000m_pursuit', name: '4000m Team Pursuit', ...prePost({ foods: ['Rice (250g)', 'Chicken', 'Banana (2)', 'Coffee'], cal: 750 }, { foods: ['Energy gel (2)', 'Caffeine gel', 'Sports drink'], cal: 250 }, ['Gels if multiple rounds'], '400ml between rounds', ['Recovery shake', 'Rice', 'Protein shake', 'Banana'], 750) },
+        { id: 'bmx_race', name: 'BMX Racing', ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Banana', 'Sports drink'], cal: 580 }, { foods: ['Energy gel', 'Banana'], cal: 160 }, ['Water + glucose between runs'], 'Hydrate between runs', ['Protein shake', 'Banana', 'Rice cakes'], 480) },
+        { id: 'mtb_xco', name: 'Mountain Bike Cross Country', ...prePost({ foods: ['Oatmeal (180g)', 'Banana (2)', 'Eggs', 'Toast', 'Coffee'], cal: 820 }, { foods: ['Energy gel (2)', 'Sports drink', 'Banana'], cal: 290 }, ['Gel every 30min', 'Sports drink at feed zones'], '600ml per hour', ['Pasta', 'Recovery shake', 'Chicken', 'Coconut water'], 900) },
+      ]
+    },
+
+    // ── Rowing ──────────────────────────────────────────────────
+    {
+      id: 'rowing', name: 'Rowing', icon: '🚣', type: 'Aquatics',
+      events: [
+        { id: 'row_single_scull', name: 'Single Scull (M/W)', ...prePost({ foods: ['Rice (250g)', 'Chicken (150g)', 'Sweet potato', 'Banana', 'OJ'], cal: 750 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 220 }, ['Too short for food', 'Sports drink between rounds'], '300ml between races', ['Protein shake', 'Bagel + PB', 'Banana', 'Fruit juice'], 700) },
+        { id: 'row_double_scull', name: 'Double Scull', ...prePost({ foods: ['Rice (250g)', 'Chicken', 'Sweet potato', 'Banana', 'OJ'], cal: 750 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 220 }, ['Sports drink between rounds'], '300ml', ['Protein shake', 'Pasta', 'Eggs', 'Banana'], 700) },
+        { id: 'row_quad_scull', name: 'Quadruple Scull', ...prePost({ foods: ['Rice (250g)', 'Chicken', 'Sweet potato', 'OJ'], cal: 760 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 230 }, ['Sports drink between rounds'], '350ml', ['Recovery shake', 'Rice', 'Chicken', 'Coconut water'], 720) },
+        { id: 'row_coxless_pair', name: 'Coxless Pair', ...prePost({ foods: ['Rice (250g)', 'Salmon', 'Banana (2)', 'Toast'], cal: 760 }, { foods: ['Energy gel', 'Sports drink'], cal: 220 }, ['Sports drink between rounds'], '300ml', ['Protein shake', 'Pasta', 'Eggs'], 720) },
+        { id: 'row_coxless_four', name: 'Coxless Four', ...prePost({ foods: ['Pasta (280g)', 'Chicken', 'Banana (2)', 'OJ'], cal: 800 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 240 }, ['Sports drink between rounds'], '350ml', ['Recovery shake', 'Pasta', 'Tuna', 'Fruit'], 760) },
+        { id: 'row_eight', name: 'Eight (with cox)', ...prePost({ foods: ['Pasta (300g)', 'Chicken', 'Banana (2)', 'Toast', 'OJ'], cal: 850 }, { foods: ['Energy gel (2)', 'Banana', 'Sports drink'], cal: 260 }, ['Sports drink between rounds'], '400ml', ['Recovery shake', 'Pasta', 'Chicken', 'Coconut water'], 800) },
+        { id: 'row_lightweight', name: 'Lightweight Double Scull', ...prePost({ foods: ['Rice (200g)', 'Chicken (120g)', 'Banana', 'OJ'], cal: 650 }, { foods: ['Energy gel', 'Banana'], cal: 180 }, ['Sports drink between rounds'], '300ml', ['Protein shake', 'Rice', 'Eggs', 'Banana'], 650) },
+      ]
+    },
+
+    // ── Canoe / Kayak ───────────────────────────────────────────
+    {
+      id: 'canoe_kayak', name: 'Canoe / Kayak', icon: '🛶', type: 'Aquatics',
+      events: [
+        { id: 'kayak_200m', name: 'Kayak Sprint 200m', ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Banana', 'Sports drink'], cal: 560 }, { foods: ['Energy gel', 'Banana'], cal: 160 }, ['Water between heats', 'Glucose tabs'], 'Hydrate', ['Protein shake', 'Banana', 'Rice cakes'], 480) },
+        { id: 'kayak_500m', name: 'Kayak Sprint 500m', ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Banana (2)', 'OJ'], cal: 620 }, { foods: ['Energy gel', 'Sports drink'], cal: 200 }, ['Sports drink between rounds'], '300ml', ['Protein shake', 'Rice', 'Chicken', 'Banana'], 560) },
+        { id: 'kayak_1000m', name: 'Kayak Sprint 1000m', ...prePost({ foods: ['Pasta (250g)', 'Chicken', 'Banana (2)', 'OJ'], cal: 720 }, { foods: ['Energy gel (2)', 'Sports drink'], cal: 240 }, ['Gel if needed', 'Sports drink'], '400ml', ['Recovery shake', 'Pasta', 'Chicken', 'Coconut water'], 680) },
+        { id: 'canoe_slalom', name: 'Canoe Slalom', ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Banana', 'Sports drink'], cal: 600 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 190 }, ['Water between runs'], 'Hydrate between runs', ['Protein shake', 'Banana', 'Rice cakes', 'Milk'], 520) },
+      ]
+    },
+
+    // ── Triathlon ───────────────────────────────────────────────
+    {
+      id: 'triathlon', name: 'Triathlon', icon: '🏅', type: 'Multi-Sport',
+      events: [
+        { id: 'olympic_tri', name: 'Olympic Triathlon', ...prePost({ foods: ['Oatmeal (200g)', 'Banana (2)', 'Toast', 'Eggs (2)', 'Coffee'], cal: 900 }, { foods: ['Energy gels (2)', 'Sports drink', 'Electrolyte tab'], cal: 320 }, ['Gel on bike every 20min', 'Sports drink throughout', 'Salt tabs if hot'], '600ml per hour', ['Recovery shake', 'Pasta', 'Protein', 'Vegetables'], 1000) },
+        { id: 'sprint_tri', name: 'Sprint Triathlon', ...prePost({ foods: ['Oatmeal (150g)', 'Banana (2)', 'Toast', 'Eggs'], cal: 750 }, { foods: ['Energy gel', 'Sports drink'], cal: 250 }, ['Gel on bike', 'Sports drink'], '500ml per hour', ['Recovery shake', 'Pasta', 'Protein shake'], 850) },
+        { id: 'paratri', name: 'Paralympic Triathlon', ...prePost({ foods: ['Oatmeal (180g)', 'Banana (2)', 'Toast', 'Eggs'], cal: 820 }, { foods: ['Energy gels (2)', 'Sports drink'], cal: 300 }, ['Gel on bike', 'Sports drink continuously'], '550ml per hour', ['Recovery shake', 'Pasta', 'Chicken', 'Fruit'], 900) },
+      ]
+    },
+
+    // ── Cross Country ───────────────────────────────────────────
+    {
+      id: 'cross_country', name: 'Cross Country / Equestrian', icon: '🐎', type: 'Equestrian',
+      events: [
+        { id: 'equestrian_eventing', name: 'Eventing (Cross Country)', ...prePost({ foods: ['Oatmeal (180g)', 'Banana (2)', 'Eggs (2)', 'Toast', 'OJ'], cal: 800 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 260 }, ['Gels between phases', 'Sports drink'], '500ml per hour', ['Recovery meal', 'Pasta', 'Protein shake', 'Fruit'], 900) },
+        { id: 'modern_pent_run', name: 'Modern Pentathlon (Run)', ...prePost({ foods: ['Pasta (250g)', 'Chicken', 'Banana (2)', 'OJ'], cal: 750 }, { foods: ['Energy gel', 'Sports drink'], cal: 230 }, ['Sports drink between disciplines'], '400ml per event', ['Recovery shake', 'Pasta', 'Chicken', 'Fruit'], 800) },
+      ]
+    },
   ],
+
+  // ─── ANAEROBIC SPORTS ────────────────────────────────────────
   anaerobic: [
+
+    // ── Athletics (Field) ───────────────────────────────────────
     {
-      id: 'sprint_100m', name: '100M Sprint', icon: '⚡', type: 'Track',
-      events: [{
-        id: '100m', name: '100 Metres',
-        preEvent: {
-          threeHour: { foods: ['White rice', 'Grilled chicken', 'Banana', 'Sports drink'], calories: 550, hydration: '400ml water' },
-          oneHour: { foods: ['Banana', 'Energy gel', 'Creatine (if used)'], calories: 180, hydration: '250ml water' }
-        },
-        during: { foods: ['Nothing — race is 10 seconds'], hydration: 'Stay hydrated between heats' },
-        postEvent: { foods: ['Protein shake', 'Banana', 'Recovery bar', 'Electrolyte drink'], calories: 450, timing: 'Within 30 min' }
-      }]
+      id: 'athletics_field', name: 'Athletics – Field Events', icon: '🏟️', type: 'Athletics',
+      events: [
+        { id: 'long_jump',   name: 'Long Jump',   ...prePost({ foods: ['Pasta (200g)', 'Chicken', 'Banana', 'Sports drink'], cal: 600 }, { foods: ['Banana', 'Energy bar', 'Sports drink'], cal: 180 }, ['Water between jumps'], 'Sip water between rounds', ['Protein shake', 'Banana', 'Recovery meal'], 550) },
+        { id: 'triple_jump', name: 'Triple Jump', ...prePost({ foods: ['Pasta (200g)', 'Chicken', 'Banana', 'OJ'], cal: 620 }, { foods: ['Energy gel', 'Banana'], cal: 180 }, ['Water between rounds'], 'Sip water', ['Protein shake', 'Banana', 'Rice', 'Eggs'], 560) },
+        { id: 'high_jump',   name: 'High Jump',   ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Salad', 'Banana'], cal: 580 }, { foods: ['Banana', 'Energy bar'], cal: 170 }, ['Water only between attempts'], '150ml between rounds', ['Protein shake', 'Light meal', 'Fruit'], 520) },
+        { id: 'pole_vault',  name: 'Pole Vault',  ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Banana', 'Sports drink'], cal: 580 }, { foods: ['Banana', 'Energy bar', 'Caffeine'], cal: 175 }, ['Water between attempts'], 'Hydrate well', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 530) },
+        { id: 'shot_put',    name: 'Shot Put',    ...prePost({ foods: ['Rice (250g)', 'Beef (150g)', 'Banana', 'Juice'], cal: 750 }, { foods: ['Energy bar', 'Banana', 'Sports drink'], cal: 200 }, ['Water between throws', 'Glucose tabs'], '150ml between rounds', ['Protein shake', 'Meat', 'Rice', 'Vegetables'], 850) },
+        { id: 'discus',      name: 'Discus Throw',...prePost({ foods: ['Rice (250g)', 'Chicken (180g)', 'Sweet potato', 'Banana'], cal: 760 }, { foods: ['Energy bar', 'Banana', 'Sports drink'], cal: 210 }, ['Water between throws'], '150ml between rounds', ['Protein shake', 'Pasta', 'Beef', 'Vegetables'], 850) },
+        { id: 'hammer',      name: 'Hammer Throw',...prePost({ foods: ['Rice (280g)', 'Beef (180g)', 'Banana (2)', 'OJ'], cal: 800 }, { foods: ['Energy bar', 'Banana', 'Sports drink'], cal: 220 }, ['Water between throws'], '150ml between rounds', ['Protein shake (40g)', 'Rice', 'Beef', 'Fruit'], 900) },
+        { id: 'javelin',     name: 'Javelin Throw',...prePost({ foods: ['Pasta (200g)', 'Chicken (150g)', 'Banana', 'Juice'], cal: 700 }, { foods: ['Energy bar', 'Banana'], cal: 190 }, ['Water between throws'], 'Hydrate between rounds', ['Protein shake', 'Pasta', 'Eggs', 'Fruit'], 750) },
+        { id: 'heptathlon',  name: 'Heptathlon (W)',...prePost({ foods: ['Oatmeal (200g)', 'Eggs (2)', 'Banana (2)', 'Toast', 'OJ'], cal: 900 }, { foods: ['Energy gel (2)', 'Banana', 'Sports drink'], cal: 300 }, ['Gels between events', 'Sports drink continuously'], '500ml per hour', ['Recovery shake', 'Pasta', 'Chicken', 'Fruit'], 950) },
+        { id: 'decathlon',   name: 'Decathlon (M)',...prePost({ foods: ['Oatmeal (200g)', 'Eggs (3)', 'Banana (2)', 'Toast', 'Coffee'], cal: 950 }, { foods: ['Energy gel (2)', 'Banana (2)', 'Sports drink'], cal: 320 }, ['Gels between events', 'Sports drink continuously'], '600ml per hour', ['Recovery shake', 'Large meal', 'Pasta', 'Protein shake'], 1000) },
+      ]
     },
-    {
-      id: 'sprint_200m', name: '200M Sprint', icon: '💨', type: 'Track',
-      events: [{
-        id: '200m', name: '200 Metres',
-        preEvent: {
-          threeHour: { foods: ['Rice with chicken', 'Vegetables', 'Banana'], calories: 600, hydration: '450ml water' },
-          oneHour: { foods: ['Energy gel', 'Sports drink', 'Banana'], calories: 200, hydration: '300ml sports drink' }
-        },
-        during: { foods: ['Nothing for race', 'Sports drink between rounds'], hydration: '200ml between heats' },
-        postEvent: { foods: ['Protein shake', 'Rice', 'Chicken', 'Coconut water'], calories: 500, timing: 'Within 30 min' }
-      }]
-    },
-    {
-      id: 'sprint_400m', name: '400M Sprint', icon: '🔥', type: 'Track',
-      events: [{
-        id: '400m', name: '400 Metres',
-        preEvent: {
-          threeHour: { foods: ['Pasta', 'Chicken', 'Banana', 'Toast'], calories: 650, hydration: '500ml water' },
-          oneHour: { foods: ['Energy gel', 'Banana', 'Sports drink'], calories: 220, hydration: '300ml sports drink' }
-        },
-        during: { foods: ['Sports drink between rounds'], hydration: '300ml between races' },
-        postEvent: { foods: ['Protein shake', 'Pasta', 'Egg', 'Fruit'], calories: 600, timing: 'Within 30 min' }
-      }]
-    },
+
+    // ── Weightlifting ───────────────────────────────────────────
     {
       id: 'weightlifting', name: 'Weightlifting', icon: '🏋️', type: 'Strength',
       events: [
-        {
-          id: 'snatch_cj', name: 'Snatch & Clean & Jerk',
-          preEvent: {
-            threeHour: { foods: ['Rice', 'Beef/Chicken', 'Vegetables', 'Banana'], calories: 700, hydration: '500ml water' },
-            oneHour: { foods: ['Creatine', 'Caffeine', 'Small banana'], calories: 150, hydration: '200ml water' }
-          },
-          during: { foods: ['Glucose tablets between lifts', 'Sports drink'], hydration: '200ml between attempts' },
-          postEvent: { foods: ['Protein shake (40g)', 'Rice', 'Eggs', 'Milk'], calories: 800, timing: 'Immediately after' }
-        }
+        { id: 'wl_snatch_cj_55', name: '55kg (Snatch + Clean & Jerk)', ...prePost({ foods: ['Rice (180g)', 'Chicken (130g)', 'Banana', 'Sports drink'], cal: 650 }, { foods: ['Creatine', 'Caffeine', 'Banana'], cal: 150 }, ['Glucose tabs between lifts', 'Sports drink'], '200ml between attempts', ['Protein shake (40g)', 'Rice', 'Eggs', 'Milk'], 780) },
+        { id: 'wl_61', name: '61kg Class', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 700 }, { foods: ['Creatine', 'Caffeine', 'Banana', 'Energy gel'], cal: 170 }, ['Glucose tabs', 'Sports drink sips'], '200ml between attempts', ['Protein shake (40g)', 'Rice', 'Beef', 'Milk'], 820) },
+        { id: 'wl_67', name: '67kg Class', ...prePost({ foods: ['Rice (220g)', 'Beef (150g)', 'Sweet potato', 'Banana'], cal: 750 }, { foods: ['Creatine', 'Caffeine', 'Banana'], cal: 180 }, ['Glucose tabs', 'Sports drink'], 'Hydrate between attempts', ['Protein shake (40g)', 'Large rice meal', 'Beef', 'Eggs'], 850) },
+        { id: 'wl_73', name: '73kg Class', ...prePost({ foods: ['Rice (240g)', 'Beef (160g)', 'Sweet potato', 'Banana (2)'], cal: 800 }, { foods: ['Creatine', 'Caffeine', 'Energy gel', 'Banana'], cal: 190 }, ['Glucose tabs', 'Sports drink sips'], '200ml', ['Protein shake (40g)', 'Large meal', 'Beef', 'Eggs', 'Milk'], 900) },
+        { id: 'wl_81', name: '81kg Class', ...prePost({ foods: ['Rice (260g)', 'Beef (180g)', 'Sweet potato', 'Banana (2)', 'Milk'], cal: 850 }, { foods: ['Creatine', 'Caffeine gel', 'Banana (2)'], cal: 210 }, ['Glucose tabs', 'Sports drink'], '250ml', ['Protein shake (50g)', 'Rice (300g)', 'Beef', 'Milk (500ml)'], 950) },
+        { id: 'wl_89', name: '89kg Class', ...prePost({ foods: ['Rice (280g)', 'Beef (200g)', 'Sweet potato', 'Banana (2)'], cal: 900 }, { foods: ['Creatine', 'Caffeine', 'Energy gel (2)'], cal: 230 }, ['Glucose tabs', 'Sports drink'], '250ml', ['Protein shake (50g)', 'Large rice + beef meal', 'Milk'], 1000) },
+        { id: 'wl_96', name: '96kg Class', ...prePost({ foods: ['Large rice (300g)', 'Beef (220g)', 'Sweet potato (2)', 'Banana (2)'], cal: 1000 }, { foods: ['Creatine', 'Caffeine gel', 'Energy gel (2)', 'Banana'], cal: 280 }, ['Glucose tabs', 'Sports drink', 'Salt tabs'], '300ml', ['Protein shake (60g)', 'Large meal', 'Beef', 'Rice', 'Milk'], 1100) },
+        { id: 'wl_102', name: '102kg Class', ...prePost({ foods: ['Large rice (320g)', 'Beef (240g)', 'Sweet potato (2)', 'Banana (3)'], cal: 1100 }, { foods: ['Creatine', 'Caffeine gel', 'Energy gel (2)'], cal: 300 }, ['Glucose tabs', 'Sports drink'], '300ml', ['Protein shake (60g)', 'Large rice + beef', 'Eggs', 'Milk'], 1150) },
+        { id: 'wl_109', name: '109kg Class', ...prePost({ foods: ['Large rice (350g)', 'Beef (260g)', 'Sweet potato (2)', 'Banana (3)', 'Juice'], cal: 1200 }, { foods: ['Creatine', 'Caffeine gel', 'Energy gel (3)'], cal: 330 }, ['Glucose tabs', 'Sports drink', 'Salt tabs'], '350ml', ['Protein shake (70g)', 'Very large meal', 'Beef', 'Rice', 'Milk'], 1250) },
+        { id: 'wl_109plus', name: '+109kg Class', ...prePost({ foods: ['Very large rice (400g)', 'Beef (300g)', 'Sweet potato (3)', 'Banana (3)', 'Whole milk'], cal: 1400 }, { foods: ['Creatine', 'Caffeine gel (2)', 'Energy gel (3)', 'Banana'], cal: 380 }, ['Glucose tabs', 'Sports drink', 'Salt tabs if hot'], '400ml', ['Protein shake (80g)', 'Extremely large meal', 'Beef 350g', 'Rice 400g', 'Whole milk 600ml'], 1400) },
       ]
     },
+
+    // ── Gymnastics ──────────────────────────────────────────────
     {
-      id: 'shot_put', name: 'Shot Put', icon: '⭕', type: 'Field',
-      events: [{
-        id: 'shot', name: 'Shot Put',
-        preEvent: {
-          threeHour: { foods: ['Rice', 'Protein-rich meal', 'Banana', 'Juice'], calories: 700, hydration: '500ml water' },
-          oneHour: { foods: ['Energy bar', 'Banana', 'Sports drink'], calories: 200, hydration: '250ml water' }
-        },
-        during: { foods: ['Water between throws', 'Glucose tabs if needed'], hydration: '150ml between rounds' },
-        postEvent: { foods: ['Protein shake', 'Meat', 'Rice', 'Vegetables'], calories: 850, timing: 'Within 30 min' }
-      }]
+      id: 'gymnastics_artistic', name: 'Artistic Gymnastics', icon: '🤸', type: 'Gymnastics',
+      events: [
+        { id: 'gym_floor', name: 'Floor Exercise', ...prePost({ foods: ['Light rice (150g)', 'Chicken (120g)', 'Banana', 'Water'], cal: 480 }, { foods: ['Banana', 'Honey sachet', 'Sports drink'], cal: 150 }, ['Banana between rotations', 'Sports drink'], '200ml between events', ['Protein shake', 'Fruit', 'Yogurt', 'Recovery meal'], 580) },
+        { id: 'gym_vault', name: 'Vault', ...prePost({ foods: ['Light rice (150g)', 'Chicken (120g)', 'Banana', 'OJ'], cal: 480 }, { foods: ['Banana', 'Honey'], cal: 140 }, ['Water between attempts'], '150ml between rotations', ['Protein shake', 'Banana', 'Yogurt'], 550) },
+        { id: 'gym_ubar', name: 'Uneven Bars (W)', ...prePost({ foods: ['Light rice (150g)', 'Chicken (120g)', 'Banana', 'OJ'], cal: 470 }, { foods: ['Banana', 'Honey', 'Sports drink'], cal: 140 }, ['Water between events'], '150ml', ['Protein shake', 'Fruit', 'Milk'], 530) },
+        { id: 'gym_hbar', name: 'Horizontal Bar (M)', ...prePost({ foods: ['Rice (160g)', 'Chicken (130g)', 'Banana', 'OJ'], cal: 500 }, { foods: ['Banana', 'Energy bar'], cal: 150 }, ['Water between events'], '200ml', ['Protein shake', 'Banana', 'Milk'], 540) },
+        { id: 'gym_beam', name: 'Balance Beam (W)', ...prePost({ foods: ['Light rice (140g)', 'Chicken (120g)', 'Banana'], cal: 460 }, { foods: ['Banana', 'Honey'], cal: 130 }, ['Water sips only between events'], '150ml', ['Protein shake', 'Fruit', 'Light meal'], 520) },
+        { id: 'gym_rings', name: 'Rings (M)', ...prePost({ foods: ['Rice (180g)', 'Chicken (140g)', 'Banana', 'Milk'], cal: 540 }, { foods: ['Banana', 'Energy bar'], cal: 160 }, ['Water between events'], '200ml', ['Protein shake', 'Banana', 'Eggs'], 560) },
+        { id: 'gym_pbars', name: 'Parallel Bars (M)', ...prePost({ foods: ['Rice (180g)', 'Chicken (140g)', 'Banana', 'OJ'], cal: 540 }, { foods: ['Banana', 'Energy bar', 'Sports drink'], cal: 165 }, ['Water between events'], '200ml', ['Protein shake', 'Rice', 'Eggs'], 560) },
+        { id: 'gym_team_all_around', name: 'Team All-Around', ...prePost({ foods: ['Rice (180g)', 'Chicken (150g)', 'Banana (2)', 'OJ'], cal: 580 }, { foods: ['Banana (2)', 'Energy gel', 'Sports drink'], cal: 200 }, ['Banana between rotations', 'Sports drink', 'Energy gels'], '300ml per rotation', ['Protein shake', 'Recovery meal', 'Fruit', 'Yogurt'], 650) },
+        { id: 'gym_ind_all_around', name: 'Individual All-Around', ...prePost({ foods: ['Rice (180g)', 'Chicken (150g)', 'Banana (2)', 'OJ'], cal: 580 }, { foods: ['Banana (2)', 'Energy gel', 'Sports drink'], cal: 200 }, ['Banana between apparatus', 'Sports drink', 'Gels if needed'], '300ml', ['Protein shake', 'Recovery meal', 'Fruit', 'Yogurt'], 650) },
+      ]
     },
+
+    // ── Rhythmic Gymnastics ─────────────────────────────────────
     {
-      id: 'long_jump', name: 'Long Jump', icon: '📏', type: 'Field',
-      events: [{
-        id: 'lj', name: 'Long Jump',
-        preEvent: {
-          threeHour: { foods: ['Light pasta', 'Chicken', 'Banana'], calories: 500, hydration: '400ml water' },
-          oneHour: { foods: ['Energy gel', 'Sports drink'], calories: 180, hydration: '250ml water' }
-        },
-        during: { foods: ['Water between jumps'], hydration: 'Sip water between rounds' },
-        postEvent: { foods: ['Protein shake', 'Banana', 'Recovery meal'], calories: 500, timing: 'Within 45 min' }
-      }]
+      id: 'gymnastics_rhythmic', name: 'Rhythmic Gymnastics', icon: '🎀', type: 'Gymnastics',
+      events: [
+        { id: 'rhythmic_ind', name: 'Individual All-Around', ...prePost({ foods: ['Light rice (130g)', 'Chicken (110g)', 'Banana', 'Water'], cal: 430 }, { foods: ['Banana', 'Honey', 'Water'], cal: 130 }, ['Water sips between routines'], '150ml between routines', ['Light protein meal', 'Fruit', 'Yogurt'], 480) },
+        { id: 'rhythmic_group', name: 'Group (5 apparatus)', ...prePost({ foods: ['Light rice (130g)', 'Chicken (110g)', 'Banana'], cal: 430 }, { foods: ['Banana', 'Honey'], cal: 120 }, ['Water between routines'], '150ml', ['Protein shake', 'Banana', 'Light meal'], 470) },
+      ]
     },
+
+    // ── Trampoline ──────────────────────────────────────────────
     {
-      id: 'high_jump', name: 'High Jump', icon: '🆙', type: 'Field',
-      events: [{
-        id: 'hj', name: 'High Jump',
-        preEvent: {
-          threeHour: { foods: ['Rice', 'Chicken', 'Salad', 'Banana'], calories: 500, hydration: '400ml water' },
-          oneHour: { foods: ['Banana', 'Energy bar'], calories: 180, hydration: '200ml water' }
-        },
-        during: { foods: ['Water only between attempts'], hydration: '150ml between rounds' },
-        postEvent: { foods: ['Protein shake', 'Light meal', 'Fruit'], calories: 500, timing: 'Within 45 min' }
-      }]
+      id: 'trampoline', name: 'Trampoline Gymnastics', icon: '🔁', type: 'Gymnastics',
+      events: [
+        { id: 'trampoline_ind', name: 'Individual Trampoline', ...prePost({ foods: ['Rice (160g)', 'Chicken (130g)', 'Banana', 'OJ'], cal: 500 }, { foods: ['Banana', 'Energy bar'], cal: 150 }, ['Water between routines'], '200ml between rounds', ['Protein shake', 'Banana', 'Rice', 'Eggs'], 520) },
+        { id: 'trampoline_synchro', name: 'Synchronized Trampoline', ...prePost({ foods: ['Rice (160g)', 'Chicken (130g)', 'Banana', 'OJ'], cal: 500 }, { foods: ['Banana', 'Energy bar'], cal: 150 }, ['Water between routines'], '200ml', ['Protein shake', 'Banana', 'Light meal'], 520) },
+      ]
     },
+
+    // ── Indoor Athletics ────────────────────────────────────────
     {
-      id: 'gymnastics', name: 'Gymnastics', icon: '🤸', type: 'Gymnastics',
-      events: [{
-        id: 'artistic', name: 'Artistic Gymnastics',
-        preEvent: {
-          threeHour: { foods: ['Light rice', 'Chicken', 'Banana', 'Water'], calories: 450, hydration: '350ml water' },
-          oneHour: { foods: ['Banana', 'Honey', 'Sports drink'], calories: 150, hydration: '200ml water' }
-        },
-        during: { foods: ['Banana between rotations', 'Energy gels', 'Sports drink'], hydration: '200ml between events' },
-        postEvent: { foods: ['Protein shake', 'Fruit', 'Yogurt', 'Recovery meal'], calories: 600, timing: 'Within 30 min' }
-      }]
-    }
+      id: 'indoor_athletics', name: 'Indoor Athletics', icon: '🏟️', type: 'Indoor',
+      events: [
+        { id: 'indoor_60m', name: '60m Sprint (Indoor)', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 550 }, { foods: ['Banana', 'Energy gel'], cal: 150 }, ['Water between heats', 'Glucose tabs'], 'Hydrate between rounds', ['Protein shake', 'Banana', 'Rice cakes'], 450) },
+        { id: 'indoor_200m', name: '200m (Indoor)', ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Banana', 'OJ'], cal: 580 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 180 }, ['Sports drink between rounds'], '250ml', ['Protein shake', 'Rice', 'Banana', 'Coconut water'], 500) },
+        { id: 'indoor_400m', name: '400m (Indoor)', ...prePost({ foods: ['Pasta (200g)', 'Chicken', 'Banana', 'Toast'], cal: 640 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 210 }, ['Sports drink between rounds'], '300ml', ['Protein shake', 'Pasta', 'Egg', 'Fruit'], 580) },
+        { id: 'indoor_800m', name: '800m (Indoor)', ...prePost({ foods: ['Rice (200g)', 'Salmon', 'Sweet potato', 'Banana'], cal: 620 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 200 }, ['Sports drink between rounds'], '300ml', ['Recovery shake', 'Rice', 'Chicken', 'Fruit'], 600) },
+        { id: 'indoor_1500m', name: '1500m (Indoor)', ...prePost({ foods: ['Pasta (250g)', 'Chicken', 'Banana (2)', 'OJ'], cal: 700 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 220 }, ['Gel if needed', 'Sports drink'], '400ml', ['Recovery shake', 'Pasta', 'Tuna', 'Coconut water'], 650) },
+        { id: 'indoor_3000m', name: '3000m (Indoor)', ...prePost({ foods: ['Oatmeal (150g)', 'Banana (2)', 'Eggs', 'OJ'], cal: 720 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 240 }, ['Gels if multiple rounds', 'Sports drink'], '400ml', ['Pasta', 'Recovery shake', 'Coconut water'], 700) },
+        { id: 'indoor_60m_hurdles', name: '60m Hurdles (Indoor)', ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Banana', 'Sports drink'], cal: 560 }, { foods: ['Banana', 'Energy gel'], cal: 160 }, ['Water between heats'], 'Hydrate', ['Protein shake', 'Rice', 'Eggs'], 480) },
+        { id: 'indoor_hj', name: 'High Jump (Indoor)', ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Salad', 'Banana'], cal: 580 }, { foods: ['Banana', 'Energy bar'], cal: 170 }, ['Water between attempts'], '150ml', ['Protein shake', 'Light meal', 'Fruit'], 520) },
+        { id: 'indoor_pv', name: 'Pole Vault (Indoor)', ...prePost({ foods: ['Rice (200g)', 'Chicken', 'Banana', 'Sports drink'], cal: 580 }, { foods: ['Banana', 'Energy bar', 'Caffeine'], cal: 175 }, ['Water between attempts'], 'Hydrate', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 530) },
+        { id: 'indoor_lj', name: 'Long Jump (Indoor)', ...prePost({ foods: ['Pasta (200g)', 'Chicken', 'Banana', 'Sports drink'], cal: 600 }, { foods: ['Banana', 'Energy bar'], cal: 180 }, ['Water between jumps'], 'Sip water', ['Protein shake', 'Banana', 'Recovery meal'], 550) },
+        { id: 'indoor_tj', name: 'Triple Jump (Indoor)', ...prePost({ foods: ['Pasta (200g)', 'Chicken', 'Banana', 'OJ'], cal: 620 }, { foods: ['Energy gel', 'Banana'], cal: 180 }, ['Water between rounds'], 'Sip water', ['Protein shake', 'Banana', 'Rice', 'Eggs'], 560) },
+        { id: 'indoor_shot', name: 'Shot Put (Indoor)', ...prePost({ foods: ['Rice (250g)', 'Beef (150g)', 'Banana', 'Juice'], cal: 750 }, { foods: ['Energy bar', 'Banana', 'Sports drink'], cal: 200 }, ['Water between throws'], '150ml', ['Protein shake', 'Meat', 'Rice', 'Vegetables'], 850) },
+        { id: 'indoor_pent', name: 'Pentathlon (Indoor)', ...prePost({ foods: ['Oatmeal (200g)', 'Eggs (2)', 'Banana (2)', 'Toast', 'OJ'], cal: 880 }, { foods: ['Energy gel (2)', 'Banana', 'Sports drink'], cal: 290 }, ['Gels between events', 'Sports drink'], '500ml per hour', ['Recovery shake', 'Pasta', 'Chicken', 'Fruit'], 950) },
+        { id: '4x400m_relay_indoor', name: '4×400m Relay (Indoor)', ...prePost({ foods: ['Pasta (200g)', 'Chicken', 'Banana (2)', 'Toast'], cal: 650 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 220 }, ['Sports drink between rounds'], '300ml', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 600) },
+      ]
+    },
+
+    // ── Boxing ──────────────────────────────────────────────────
+    {
+      id: 'boxing', name: 'Boxing', icon: '🥊', type: 'Combat',
+      events: [
+        { id: 'boxing_flyweight', name: 'Flyweight (–52kg)', ...prePost({ foods: ['Rice (180g)', 'Chicken (130g)', 'Banana', 'Sports drink'], cal: 620 }, { foods: ['Banana', 'Energy gel', 'Caffeine'], cal: 170 }, ['Sports drink between rounds', 'Glucose tabs'], '200ml between rounds', ['Protein shake (35g)', 'Rice', 'Chicken', 'Fruit juice'], 700) },
+        { id: 'boxing_bantam', name: 'Bantamweight (–56kg)', ...prePost({ foods: ['Rice (190g)', 'Chicken (140g)', 'Banana', 'OJ'], cal: 650 }, { foods: ['Banana', 'Energy gel', 'Caffeine'], cal: 180 }, ['Sports drink between rounds'], '200ml', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 720) },
+        { id: 'boxing_feather', name: 'Featherweight (–57kg)', ...prePost({ foods: ['Rice (190g)', 'Chicken (140g)', 'Banana', 'OJ'], cal: 660 }, { foods: ['Energy gel', 'Banana'], cal: 185 }, ['Sports drink between rounds'], '200ml', ['Protein shake', 'Rice', 'Chicken'], 730) },
+        { id: 'boxing_light', name: 'Lightweight (–63.5kg)', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 700 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 195 }, ['Sports drink between rounds'], '250ml', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 760) },
+        { id: 'boxing_welter', name: 'Welterweight (–69kg)', ...prePost({ foods: ['Rice (220g)', 'Chicken (160g)', 'Banana', 'OJ'], cal: 740 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 210 }, ['Sports drink between rounds'], '250ml', ['Protein shake (40g)', 'Rice', 'Chicken', 'Juice'], 800) },
+        { id: 'boxing_middle', name: 'Middleweight (–75kg)', ...prePost({ foods: ['Rice (240g)', 'Chicken (170g)', 'Banana', 'Sports drink'], cal: 790 }, { foods: ['Energy gel', 'Banana (2)'], cal: 220 }, ['Sports drink between rounds'], '300ml', ['Protein shake (40g)', 'Rice', 'Beef', 'Fruit'], 850) },
+        { id: 'boxing_heavy', name: 'Heavyweight (–92kg)', ...prePost({ foods: ['Rice (280g)', 'Beef (180g)', 'Sweet potato', 'Banana (2)'], cal: 900 }, { foods: ['Energy gel (2)', 'Banana', 'Caffeine'], cal: 260 }, ['Sports drink between rounds', 'Salt tabs'], '300ml', ['Protein shake (50g)', 'Large meal', 'Beef', 'Rice'], 950) },
+        { id: 'boxing_super_heavy', name: 'Super Heavyweight (+92kg)', ...prePost({ foods: ['Large rice (320g)', 'Beef (220g)', 'Sweet potato', 'Banana (2)', 'OJ'], cal: 1050 }, { foods: ['Energy gel (2)', 'Banana (2)', 'Caffeine gel'], cal: 300 }, ['Sports drink between rounds', 'Salt tabs'], '350ml', ['Protein shake (60g)', 'Very large meal', 'Beef', 'Rice', 'Milk'], 1050) },
+      ]
+    },
+
+    // ── Wrestling ───────────────────────────────────────────────
+    {
+      id: 'wrestling', name: 'Wrestling', icon: '🤼', type: 'Combat',
+      events: [
+        { id: 'wrestling_57', name: 'Freestyle 57kg', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 680 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 190 }, ['Sports drink between bouts', 'Salt tabs'], '250ml', ['Protein shake', 'Rice', 'Chicken', 'Fruit'], 750) },
+        { id: 'wrestling_65', name: 'Freestyle 65kg', ...prePost({ foods: ['Rice (220g)', 'Chicken (160g)', 'Banana', 'OJ'], cal: 720 }, { foods: ['Energy gel', 'Banana'], cal: 200 }, ['Sports drink between bouts'], '250ml', ['Protein shake', 'Rice', 'Beef', 'Fruit'], 800) },
+        { id: 'wrestling_74', name: 'Freestyle 74kg', ...prePost({ foods: ['Rice (240g)', 'Beef (160g)', 'Banana', 'Sports drink'], cal: 780 }, { foods: ['Energy gel', 'Banana (2)'], cal: 220 }, ['Sports drink between bouts', 'Salt tabs'], '300ml', ['Protein shake (40g)', 'Rice', 'Beef', 'Juice'], 860) },
+        { id: 'wrestling_86', name: 'Freestyle 86kg', ...prePost({ foods: ['Rice (260g)', 'Beef (180g)', 'Sweet potato', 'Banana'], cal: 860 }, { foods: ['Energy gel', 'Banana (2)', 'Caffeine'], cal: 250 }, ['Sports drink', 'Salt tabs'], '300ml', ['Protein shake (50g)', 'Large meal', 'Beef', 'Rice'], 920) },
+        { id: 'wrestling_125', name: 'Freestyle 125kg', ...prePost({ foods: ['Large rice (320g)', 'Beef (220g)', 'Sweet potato', 'Banana (2)'], cal: 1050 }, { foods: ['Energy gel (2)', 'Banana (2)'], cal: 300 }, ['Sports drink', 'Salt tabs if hot'], '350ml', ['Protein shake (60g)', 'Very large meal', 'Beef', 'Rice', 'Milk'], 1100) },
+        { id: 'wrestling_ggr_60', name: 'Greco-Roman 60kg', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 680 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 190 }, ['Sports drink between bouts'], '250ml', ['Protein shake', 'Rice', 'Chicken', 'Fruit'], 750) },
+        { id: 'wrestling_ggr_130', name: 'Greco-Roman 130kg', ...prePost({ foods: ['Large rice (340g)', 'Beef (240g)', 'Sweet potato', 'Banana (2)', 'Milk'], cal: 1100 }, { foods: ['Energy gel (2)', 'Banana (2)', 'Caffeine'], cal: 320 }, ['Sports drink', 'Salt tabs'], '400ml', ['Protein shake (70g)', 'Very large meal', 'Beef', 'Rice', 'Full milk'], 1150) },
+      ]
+    },
+
+    // ── Judo ────────────────────────────────────────────────────
+    {
+      id: 'judo', name: 'Judo', icon: '🥋', type: 'Combat',
+      events: [
+        { id: 'judo_60', name: 'Judo –60kg', ...prePost({ foods: ['Rice (180g)', 'Chicken (130g)', 'Banana', 'Sports drink'], cal: 640 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 180 }, ['Sports drink between bouts', 'Salt tabs'], '250ml', ['Protein shake', 'Rice', 'Chicken', 'Fruit'], 720) },
+        { id: 'judo_66', name: 'Judo –66kg', ...prePost({ foods: ['Rice (200g)', 'Chicken (140g)', 'Banana', 'OJ'], cal: 670 }, { foods: ['Energy gel', 'Banana'], cal: 190 }, ['Sports drink between bouts'], '250ml', ['Protein shake', 'Rice', 'Eggs', 'Banana'], 740) },
+        { id: 'judo_73', name: 'Judo –73kg', ...prePost({ foods: ['Rice (220g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 720 }, { foods: ['Energy gel', 'Banana'], cal: 200 }, ['Sports drink between bouts'], '250ml', ['Protein shake', 'Rice', 'Chicken', 'Fruit'], 790) },
+        { id: 'judo_81', name: 'Judo –81kg', ...prePost({ foods: ['Rice (240g)', 'Chicken (160g)', 'Banana', 'OJ'], cal: 760 }, { foods: ['Energy gel', 'Banana (2)'], cal: 220 }, ['Sports drink', 'Salt tabs'], '300ml', ['Protein shake (40g)', 'Rice', 'Beef', 'Juice'], 840) },
+        { id: 'judo_90', name: 'Judo –90kg', ...prePost({ foods: ['Rice (260g)', 'Beef (160g)', 'Sweet potato', 'Banana'], cal: 840 }, { foods: ['Energy gel', 'Banana (2)', 'Caffeine'], cal: 250 }, ['Sports drink', 'Salt tabs'], '300ml', ['Protein shake (50g)', 'Rice', 'Beef', 'Milk'], 900) },
+        { id: 'judo_100', name: 'Judo –100kg', ...prePost({ foods: ['Rice (280g)', 'Beef (180g)', 'Sweet potato', 'Banana (2)'], cal: 920 }, { foods: ['Energy gel (2)', 'Banana', 'Caffeine'], cal: 270 }, ['Sports drink', 'Salt tabs'], '350ml', ['Protein shake (50g)', 'Large meal', 'Beef', 'Rice'], 970) },
+        { id: 'judo_100plus', name: 'Judo +100kg', ...prePost({ foods: ['Large rice (320g)', 'Beef (220g)', 'Sweet potato', 'Banana (2)', 'OJ'], cal: 1050 }, { foods: ['Energy gel (2)', 'Banana (2)', 'Caffeine'], cal: 310 }, ['Sports drink', 'Salt tabs if hot'], '400ml', ['Protein shake (60g)', 'Very large meal', 'Beef', 'Rice', 'Milk'], 1100) },
+      ]
+    },
+
+    // ── Shooting ────────────────────────────────────────────────
+    {
+      id: 'shooting', name: 'Shooting', icon: '🎯', type: 'Precision',
+      events: [
+        { id: 'shoot_10m_air_rifle', name: '10m Air Rifle', ...prePost({ foods: ['Light rice (150g)', 'Chicken (120g)', 'Banana', 'Water'], cal: 480 }, { foods: ['Small banana', 'Water', 'Light snack'], cal: 120 }, ['Water sips only', 'Avoid caffeine if shaky'], 'Minimal fluid', ['Light protein meal', 'Banana', 'Yogurt'], 500) },
+        { id: 'shoot_10m_air_pistol', name: '10m Air Pistol', ...prePost({ foods: ['Light rice (150g)', 'Chicken (120g)', 'Banana'], cal: 480 }, { foods: ['Small banana', 'Water'], cal: 110 }, ['Water sips only'], 'Minimal fluid — avoid bloating', ['Light protein meal', 'Fruit', 'Yogurt'], 480) },
+        { id: 'shoot_25m_pistol', name: '25m Rapid Fire Pistol', ...prePost({ foods: ['Light rice (150g)', 'Chicken (120g)', 'Banana'], cal: 490 }, { foods: ['Banana', 'Water'], cal: 115 }, ['Water only'], '200ml max', ['Protein shake', 'Banana', 'Light meal'], 490) },
+        { id: 'shoot_50m_rifle', name: '50m Rifle 3 Positions', ...prePost({ foods: ['Light rice (150g)', 'Chicken (130g)', 'Banana', 'Water'], cal: 500 }, { foods: ['Banana', 'Small snack', 'Water'], cal: 120 }, ['Water sips'], 'Minimal fluid', ['Light meal', 'Fruit', 'Yogurt'], 500) },
+        { id: 'shoot_trap', name: 'Trap (Shotgun)', ...prePost({ foods: ['Rice (180g)', 'Chicken (140g)', 'Banana', 'OJ'], cal: 560 }, { foods: ['Banana', 'Energy bar', 'Water'], cal: 150 }, ['Water between stations'], '250ml', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 580) },
+        { id: 'shoot_skeet', name: 'Skeet (Shotgun)', ...prePost({ foods: ['Rice (180g)', 'Chicken (140g)', 'Banana', 'OJ'], cal: 560 }, { foods: ['Banana', 'Energy bar', 'Water'], cal: 150 }, ['Water between stations'], '250ml', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 580) },
+      ]
+    },
+
+    // ── Archery ─────────────────────────────────────────────────
+    {
+      id: 'archery', name: 'Archery', icon: '🏹', type: 'Precision',
+      events: [
+        { id: 'archery_recurve_ind', name: 'Recurve Individual', ...prePost({ foods: ['Rice (180g)', 'Chicken (130g)', 'Banana', 'Water'], cal: 520 }, { foods: ['Banana', 'Small snack', 'Water'], cal: 140 }, ['Water between ends', 'Small snack at break'], '300ml per session', ['Protein shake', 'Banana', 'Light meal', 'Yogurt'], 560) },
+        { id: 'archery_compound_ind', name: 'Compound Individual', ...prePost({ foods: ['Rice (180g)', 'Chicken (130g)', 'Banana', 'Water'], cal: 520 }, { foods: ['Banana', 'Snack bar', 'Water'], cal: 140 }, ['Water between ends'], '300ml', ['Protein shake', 'Banana', 'Light meal'], 560) },
+        { id: 'archery_team', name: 'Team Recurve/Compound', ...prePost({ foods: ['Rice (180g)', 'Chicken (140g)', 'Banana (2)', 'OJ'], cal: 560 }, { foods: ['Banana', 'Energy bar', 'Sports drink'], cal: 160 }, ['Water between ends', 'Snack at break'], '350ml', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 590) },
+        { id: 'archery_mixed_team', name: 'Mixed Team', ...prePost({ foods: ['Rice (180g)', 'Chicken (140g)', 'Banana', 'OJ'], cal: 550 }, { foods: ['Banana', 'Energy bar', 'Water'], cal: 150 }, ['Water between ends'], '300ml', ['Protein shake', 'Banana', 'Light meal'], 570) },
+      ]
+    },
+
+    // ── Fencing ─────────────────────────────────────────────────
+    {
+      id: 'fencing', name: 'Fencing', icon: '🤺', type: 'Combat',
+      events: [
+        { id: 'fencing_epee_ind', name: 'Épée Individual', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 650 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 185 }, ['Sports drink between bouts', 'Snack bar'], '300ml', ['Protein shake', 'Rice', 'Chicken', 'Fruit'], 720) },
+        { id: 'fencing_foil_ind', name: 'Foil Individual', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 650 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 185 }, ['Sports drink between bouts'], '300ml', ['Protein shake', 'Rice', 'Chicken', 'Fruit'], 720) },
+        { id: 'fencing_sabre_ind', name: 'Sabre Individual', ...prePost({ foods: ['Rice (200g)', 'Chicken (150g)', 'Banana', 'Sports drink'], cal: 660 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 190 }, ['Sports drink between bouts', 'Glucose tabs'], '300ml', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 730) },
+        { id: 'fencing_team', name: 'Team Events (all weapons)', ...prePost({ foods: ['Rice (220g)', 'Chicken (160g)', 'Banana (2)', 'OJ'], cal: 720 }, { foods: ['Energy gel (2)', 'Banana', 'Sports drink'], cal: 230 }, ['Sports drink between bouts', 'Snack bar'], '350ml', ['Protein shake (40g)', 'Rice', 'Chicken', 'Juice'], 800) },
+      ]
+    },
+
+    // ── Taekwondo ───────────────────────────────────────────────
+    {
+      id: 'taekwondo', name: 'Taekwondo', icon: '🦵', type: 'Combat',
+      events: [
+        { id: 'tkd_49', name: '–49kg (W)', ...prePost({ foods: ['Light rice (160g)', 'Chicken (120g)', 'Banana', 'Sports drink'], cal: 580 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 165 }, ['Sports drink between rounds'], '200ml', ['Protein shake', 'Rice', 'Chicken', 'Fruit'], 660) },
+        { id: 'tkd_58', name: '–58kg (W)', ...prePost({ foods: ['Rice (180g)', 'Chicken (130g)', 'Banana', 'OJ'], cal: 620 }, { foods: ['Energy gel', 'Banana'], cal: 175 }, ['Sports drink between bouts'], '220ml', ['Protein shake', 'Rice', 'Eggs', 'Fruit'], 700) },
+        { id: 'tkd_68', name: '–68kg (W)', ...prePost({ foods: ['Rice (200g)', 'Chicken (140g)', 'Banana', 'Sports drink'], cal: 670 }, { foods: ['Energy gel', 'Banana', 'Caffeine'], cal: 190 }, ['Sports drink between bouts'], '250ml', ['Protein shake', 'Rice', 'Chicken', 'Juice'], 750) },
+        { id: 'tkd_80', name: '–80kg (M)', ...prePost({ foods: ['Rice (230g)', 'Chicken (160g)', 'Banana (2)', 'OJ'], cal: 740 }, { foods: ['Energy gel', 'Banana (2)', 'Caffeine'], cal: 220 }, ['Sports drink between bouts', 'Salt tabs'], '280ml', ['Protein shake (40g)', 'Rice', 'Beef', 'Fruit'], 830) },
+        { id: 'tkd_80plus', name: '+80kg (M)', ...prePost({ foods: ['Rice (260g)', 'Beef (170g)', 'Sweet potato', 'Banana (2)'], cal: 850 }, { foods: ['Energy gel (2)', 'Banana', 'Caffeine'], cal: 260 }, ['Sports drink', 'Salt tabs'], '300ml', ['Protein shake (50g)', 'Large meal', 'Beef', 'Rice'], 920) },
+      ]
+    },
+
+    // ── Volleyball (Beach) ──────────────────────────────────────
+    {
+      id: 'beach_volleyball', name: 'Beach Volleyball', icon: '🏐', type: 'Team',
+      events: [
+        { id: 'beach_vb_match', name: 'Beach Volleyball Match', ...prePost({ foods: ['Pasta (250g)', 'Chicken (160g)', 'Banana (2)', 'Sports drink'], cal: 780 }, { foods: ['Energy gel', 'Banana', 'Sports drink'], cal: 230 }, ['Sports drink every changeover', 'Banana', 'Salt tabs in heat'], '600ml per hour', ['Recovery shake', 'Pasta', 'Chicken', 'Coconut water'], 850) },
+      ]
+    },
+
   ]
 }
 
+// ─── Training nutrition (kept for TrainingDay page) ─────────────
 export const trainingNutrition = {
   speed: {
-    name: 'Speed Training',
-    color: '#FF4D00',
-    focus: 'Fast Energy + Explosive Power',
-    preWorkout: {
-      timing: '2-3 hours before',
-      foods: ['White rice (100g)', 'Chicken breast (100g)', 'Banana', 'Sports drink'],
-      macros: { carbs: 65, protein: 20, fat: 15 },
-      tips: 'High glycemic carbs for quick energy. Avoid heavy fats.'
-    },
-    duringWorkout: {
-      foods: ['Sports drink (every 20 min)', 'Energy gel (if over 60 min)'],
-      hydration: '150-200ml every 20 min',
-      tips: 'Keep blood sugar stable. Electrolytes key for explosive work.'
-    },
-    postWorkout: {
-      timing: 'Within 30 min',
-      foods: ['Protein shake (30g)', 'Banana', 'Chocolate milk', 'Rice cakes'],
-      macros: { carbs: 60, protein: 30, fat: 10 },
-      tips: '3:1 carb-to-protein ratio for speed recovery.'
-    },
-    supplements: ['Creatine monohydrate (5g/day)', 'Caffeine (pre-workout)', 'Beta-alanine', 'BCAAs']
+    name: 'Speed Training', color: '#FF4D00', focus: 'Fast Energy + Explosive Power',
+    preWorkout:    { timing: '1-2 hours before', foods: ['White rice (100g)', 'Chicken breast (100g)', 'Banana', 'Sports drink'], macros: { carbs: 65, protein: 20, fat: 15 }, tips: 'High glycemic carbs for quick energy. Avoid heavy fats.' },
+    duringWorkout: { foods: ['Sports drink (every 20 min)', 'Energy gel (if over 60 min)'], hydration: '150-200ml every 20 min', tips: 'Keep blood sugar stable. Electrolytes key for explosive work.' },
+    postWorkout:   { timing: 'Within 30 min', foods: ['Protein shake (30g)', 'Banana', 'Chocolate milk', 'Rice cakes'], macros: { carbs: 60, protein: 30, fat: 10 }, tips: '3:1 carb-to-protein ratio for speed recovery.' },
+    supplements: ['Creatine monohydrate (5g)', 'Caffeine (100-200mg)', 'Beta-alanine (3g)', 'BCAAs (10g)']
   },
   endurance: {
-    name: 'Endurance Training',
-    color: '#4FC3F7',
-    focus: 'Sustained Energy + Glycogen Loading',
-    preWorkout: {
-      timing: '3 hours before',
-      foods: ['Oatmeal (150g)', 'Banana (2)', 'Whole grain toast', 'Eggs (2)', 'OJ'],
-      macros: { carbs: 70, protein: 15, fat: 15 },
-      tips: 'Carb-load for long sessions. Slow-release carbs are key.'
-    },
-    duringWorkout: {
-      foods: ['Energy gels every 45 min', 'Banana at aid stations', 'Sports drink continuously'],
-      hydration: '500-750ml per hour',
-      tips: '30-60g carbs per hour during long efforts.'
-    },
-    postWorkout: {
-      timing: 'Within 30-45 min',
-      foods: ['Recovery shake', 'Pasta', 'Salmon', 'Sweet potato', 'Coconut water'],
-      macros: { carbs: 60, protein: 25, fat: 15 },
-      tips: 'Replenish glycogen + repair muscle. Omega-3s help inflammation.'
-    },
-    supplements: ['Electrolyte tabs', 'Beetroot juice (nitrates)', 'Iron (if deficient)', 'Vitamin D']
+    name: 'Endurance Training', color: '#4FC3F7', focus: 'Sustained Energy + Glycogen Loading',
+    preWorkout:    { timing: '3 hours before', foods: ['Oatmeal (150g)', 'Banana (2)', 'Whole grain toast', 'Eggs (2)', 'OJ'], macros: { carbs: 70, protein: 15, fat: 15 }, tips: 'Carb-load for long sessions. Slow-release carbs are key.' },
+    duringWorkout: { foods: ['Energy gels every 45 min', 'Banana', 'Sports drink'], hydration: '500-750ml per hour', tips: '30-60g carbs per hour during long efforts.' },
+    postWorkout:   { timing: 'Within 30-45 min', foods: ['Recovery shake', 'Pasta', 'Salmon', 'Sweet potato', 'Coconut water'], macros: { carbs: 60, protein: 25, fat: 15 }, tips: 'Replenish glycogen + repair muscle. Omega-3s help inflammation.' },
+    supplements: ['Electrolyte tabs', 'Beetroot juice', 'Iron (if deficient)', 'Vitamin D']
   },
   strength: {
-    name: 'Strength Training',
-    color: '#E63946',
-    focus: 'Muscle Protein Synthesis + Power',
-    preWorkout: {
-      timing: '1.5-2 hours before',
-      foods: ['Rice (150g)', 'Beef/Chicken (150g)', 'Sweet potato', 'Green vegetables'],
-      macros: { carbs: 45, protein: 35, fat: 20 },
-      tips: 'High protein pre-workout. Moderate carbs for sustained energy.'
-    },
-    duringWorkout: {
-      foods: ['BCAAs in water', 'Glucose tabs if needed'],
-      hydration: '200-300ml every 30 min',
-      tips: 'Sip BCAAs throughout. Stay hydrated for strength output.'
-    },
-    postWorkout: {
-      timing: 'Immediately — within 30 min',
-      foods: ['Whey protein shake (40g)', 'Rice (200g)', 'Eggs (3)', 'Milk (500ml)'],
-      macros: { carbs: 40, protein: 40, fat: 20 },
-      tips: 'Anabolic window is real for strength. High protein critical.'
-    },
+    name: 'Strength Training', color: '#E63946', focus: 'Muscle Protein Synthesis + Power',
+    preWorkout:    { timing: '1.5-2 hours before', foods: ['Rice (150g)', 'Beef/Chicken (150g)', 'Sweet potato', 'Green vegetables'], macros: { carbs: 45, protein: 35, fat: 20 }, tips: 'High protein pre-workout. Moderate carbs for sustained energy.' },
+    duringWorkout: { foods: ['BCAAs in water', 'Glucose tabs if needed'], hydration: '200-300ml every 30 min', tips: 'Sip BCAAs throughout. Stay hydrated for strength output.' },
+    postWorkout:   { timing: 'Immediately — within 30 min', foods: ['Whey protein shake (40g)', 'Rice (200g)', 'Eggs (3)', 'Milk (500ml)'], macros: { carbs: 40, protein: 40, fat: 20 }, tips: 'Anabolic window is real for strength. High protein critical.' },
     supplements: ['Creatine (5g/day)', 'Whey protein', 'ZMA (sleep recovery)', 'Vitamin D3 + K2']
   },
   flexibility: {
-    name: 'Flexibility & Recovery',
-    color: '#00E676',
-    focus: 'Anti-Inflammation + Tissue Repair',
-    preWorkout: {
-      timing: '1-2 hours before',
-      foods: ['Smoothie (banana + berries + spinach)', 'Almonds (30g)', 'Green tea'],
-      macros: { carbs: 50, protein: 25, fat: 25 },
-      tips: 'Light, anti-inflammatory foods. No heavy meals for flexibility work.'
-    },
-    duringWorkout: {
-      foods: ['Water with lemon', 'Coconut water'],
-      hydration: '200ml per 30 min',
-      tips: 'Hydration key for fascia health and joint mobility.'
-    },
-    postWorkout: {
-      timing: 'Within 1 hour',
-      foods: ['Tart cherry juice', 'Turmeric milk', 'Salmon', 'Leafy greens', 'Walnuts'],
-      macros: { carbs: 40, protein: 30, fat: 30 },
-      tips: 'Anti-inflammatory focus. Omega-3 + antioxidants for recovery.'
-    },
+    name: 'Flexibility & Recovery', color: '#00E676', focus: 'Anti-Inflammation + Tissue Repair',
+    preWorkout:    { timing: '1-2 hours before', foods: ['Smoothie (banana + berries + spinach)', 'Almonds (30g)', 'Green tea'], macros: { carbs: 50, protein: 25, fat: 25 }, tips: 'Light, anti-inflammatory foods. No heavy meals.' },
+    duringWorkout: { foods: ['Water with lemon', 'Coconut water'], hydration: '200ml per 30 min', tips: 'Hydration key for fascia health and joint mobility.' },
+    postWorkout:   { timing: 'Within 1 hour', foods: ['Tart cherry juice', 'Turmeric milk', 'Salmon', 'Leafy greens', 'Walnuts'], macros: { carbs: 40, protein: 30, fat: 30 }, tips: 'Anti-inflammatory focus. Omega-3 + antioxidants for recovery.' },
     supplements: ['Omega-3 fish oil', 'Magnesium', 'Tart cherry extract', 'Collagen peptides']
+  },
+  agility: {
+    name: 'Agility Training', color: '#CE93D8', focus: 'Quickness, Reaction & Coordination',
+    preWorkout:    { timing: '1-2 hours before', foods: ['Banana', 'White rice (100g)', 'Energy bar', 'Sports drink'], macros: { carbs: 65, protein: 20, fat: 15 }, tips: 'Fast-digesting carbs. Light meal — avoid heavy foods.' },
+    duringWorkout: { foods: ['Water', 'Electrolyte drink', 'Energy gel if over 60 min'], hydration: '150ml every 20 min', tips: 'Short sessions: water only. Long sessions: electrolytes.' },
+    postWorkout:   { timing: 'Within 30 min', foods: ['Protein shake (25g)', 'Banana', 'Greek yogurt', 'Rice'], macros: { carbs: 55, protein: 30, fat: 15 }, tips: 'Protein + carbs for muscle repair and glycogen refill.' },
+    supplements: ['Creatine (3-5g)', 'Caffeine (pre-session)', 'BCAAs (8-10g)', 'Electrolyte tabs']
   }
 }
 
 export const weightManagementData = {
-  cut: {
-    name: 'Cutting Phase',
-    goal: 'Lose fat, preserve muscle',
-    color: '#FF3057',
-    deficit: 400,
-    macroRatio: { carbs: 40, protein: 40, fat: 20 },
-    tips: ['Eat in 400 cal deficit', 'High protein to preserve muscle', 'Time carbs around workouts', 'Increase cardio gradually'],
-    foods: ['Chicken breast', 'Egg whites', 'Broccoli', 'Sweet potato (small)', 'Greek yogurt', 'Berries', 'Green tea']
-  },
-  bulk: {
-    name: 'Bulking Phase',
-    goal: 'Gain muscle mass',
-    color: '#FF4D00',
-    surplus: 400,
-    macroRatio: { carbs: 50, protein: 30, fat: 20 },
-    tips: ['Eat in 400 cal surplus', 'Progressive overload in gym', 'Prioritize sleep', 'Lean protein with every meal'],
-    foods: ['Whole eggs', 'Beef', 'Rice', 'Oats', 'Whole milk', 'Peanut butter', 'Avocado', 'Banana']
-  },
-  maintain: {
-    name: 'Maintenance Phase',
-    goal: 'Maintain weight, improve performance',
-    color: '#00E676',
-    surplus: 0,
-    macroRatio: { carbs: 50, protein: 25, fat: 25 },
-    tips: ['Eat at TDEE', 'Cycle carbs with training intensity', 'Focus on food quality', 'Track weekly averages'],
-    foods: ['Mixed whole foods', 'Lean proteins', 'Complex carbs', 'Healthy fats', 'Plenty of vegetables']
-  }
+  cut:      { name: 'Cutting Phase',      goal: 'Lose fat, preserve muscle',  color: '#FF3057', deficit: 400,  macroRatio: { carbs: 40, protein: 40, fat: 20 }, tips: ['Eat in 400 cal deficit', 'High protein to preserve muscle', 'Time carbs around workouts', 'Increase cardio gradually'], foods: ['Chicken breast', 'Egg whites', 'Broccoli', 'Sweet potato (small)', 'Greek yogurt', 'Berries', 'Green tea'] },
+  bulk:     { name: 'Bulking Phase',       goal: 'Gain muscle mass',           color: '#FF4D00', surplus: 400, macroRatio: { carbs: 50, protein: 30, fat: 20 }, tips: ['Eat in 400 cal surplus', 'Progressive overload in gym', 'Prioritize sleep', 'Lean protein with every meal'], foods: ['Whole eggs', 'Beef', 'Rice', 'Oats', 'Whole milk', 'Peanut butter', 'Avocado', 'Banana'] },
+  maintain: { name: 'Maintenance Phase',   goal: 'Maintain weight, improve',   color: '#00E676', surplus: 0,  macroRatio: { carbs: 50, protein: 25, fat: 25 }, tips: ['Eat at TDEE', 'Cycle carbs with training intensity', 'Focus on food quality', 'Track weekly averages'], foods: ['Mixed whole foods', 'Lean proteins', 'Complex carbs', 'Healthy fats', 'Plenty of vegetables'] }
 }
 
 export const recoveryData = {
-  immediate: {
-    label: '0-30 min Post Training',
-    color: '#FF4D00',
-    foods: ['Whey protein shake', 'Banana', 'Chocolate milk', 'White rice'],
-    focus: 'Glycogen replenishment + muscle protein synthesis kickstart'
-  },
-  shortTerm: {
-    label: '1-3 Hours Post Training',
-    color: '#FF7A00',
-    foods: ['Grilled chicken + rice', 'Salmon + sweet potato', 'Eggs + toast', 'Greek yogurt + fruit'],
-    focus: 'Full recovery meal with balanced macros'
-  },
-  overnight: {
-    label: 'Before Sleep',
-    color: '#4FC3F7',
-    foods: ['Casein protein shake', 'Cottage cheese', 'Warm milk + honey', 'Almonds'],
-    focus: 'Slow-release protein for overnight muscle repair'
-  },
-  hydration: {
-    label: 'Hydration Protocol',
-    color: '#00E676',
-    foods: ['Water (500ml immediately)', 'Coconut water', 'Electrolyte drink', 'Tart cherry juice'],
-    focus: 'Replace 150% of fluid lost during exercise'
-  }
+  immediate: { label: '0-30 min Post Training',  color: '#FF4D00', foods: ['Whey protein shake', 'Banana', 'Chocolate milk', 'White rice'], focus: 'Glycogen replenishment + muscle protein synthesis kickstart' },
+  shortTerm: { label: '1-3 Hours Post Training',  color: '#FF7A00', foods: ['Grilled chicken + rice', 'Salmon + sweet potato', 'Eggs + toast', 'Greek yogurt + fruit'], focus: 'Full recovery meal with balanced macros' },
+  overnight: { label: 'Before Sleep',             color: '#4FC3F7', foods: ['Casein protein shake', 'Cottage cheese', 'Warm milk + honey', 'Almonds'], focus: 'Slow-release protein for overnight muscle repair' },
+  hydration: { label: 'Hydration Protocol',       color: '#00E676', foods: ['Water (500ml immediately)', 'Coconut water', 'Electrolyte drink', 'Tart cherry juice'], focus: 'Replace 150% of fluid lost during exercise' }
 }
 
 export const performanceData = {
-  speed: {
-    label: 'Speed & Power',
-    color: '#FF4D00',
-    foods: ['Creatine-rich foods (red meat)', 'Fast carbs pre-workout', 'Caffeine', 'Beta-alanine foods'],
-    tips: 'Focus on phosphocreatine system — short burst energy'
-  },
-  endurance: {
-    label: 'Endurance & Stamina',
-    color: '#4FC3F7',
-    foods: ['Beetroot juice (nitrates)', 'Oats', 'Banana', 'Quinoa', 'Iron-rich foods'],
-    tips: 'VO2 max improvement — oxygen delivery optimization'
-  },
-  strength: {
-    label: 'Strength & Power',
-    color: '#E63946',
-    foods: ['High protein (2g/kg body weight)', 'Creatine', 'ZMA foods', 'Vitamin D sources'],
-    tips: 'Muscle protein synthesis — progressive overload + nutrition'
-  },
-  recovery: {
-    label: 'Recovery Speed',
-    color: '#00E676',
-    foods: ['Omega-3 (salmon, walnuts)', 'Tart cherries', 'Turmeric', 'Vitamin C foods', 'Magnesium'],
-    tips: 'Reduce inflammation + oxidative stress for faster recovery'
-  }
+  speed:     { label: 'Speed & Power',      color: '#FF4D00', foods: ['Red meat (creatine)', 'Fast carbs pre-workout', 'Caffeine', 'Beta-alanine foods'], tips: 'Focus on phosphocreatine system — short burst energy' },
+  endurance: { label: 'Endurance & Stamina',color: '#4FC3F7', foods: ['Beetroot juice (nitrates)', 'Oats', 'Banana', 'Quinoa', 'Iron-rich foods'], tips: 'VO2 max improvement — oxygen delivery optimization' },
+  strength:  { label: 'Strength & Power',   color: '#E63946', foods: ['High protein (2g/kg)', 'Creatine', 'ZMA foods', 'Vitamin D sources'], tips: 'Muscle protein synthesis — progressive overload + nutrition' },
+  recovery:  { label: 'Recovery Speed',     color: '#00E676', foods: ['Omega-3 (salmon, walnuts)', 'Tart cherries', 'Turmeric', 'Vitamin C foods', 'Magnesium'], tips: 'Reduce inflammation + oxidative stress for faster recovery' }
 }
