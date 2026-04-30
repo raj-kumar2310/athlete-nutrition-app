@@ -5,6 +5,8 @@ import InjuryAssistant from './pages/Injuryassistant'
 
 
 // Pages
+import FirstAid from './pages/FirstAid'
+
 import Welcome from './pages/Welcome'
 import PersonalInfo from './pages/PersonalInfo'
 import Home from './pages/Home'
@@ -34,6 +36,7 @@ function App() {
         <Route path="/performance" element={<Performance />} />
         <Route path="/recovery" element={<Recovery />} />
         <Route path="/weight" element={<WeightManagement />} />
+        <Route path="/firstaid" element={<FirstAid />} />
         <Route path="/injury" element={<InjuryAssistant />} />
 
         <Route path="/calculator" element={<NutritionCalculator />} />
