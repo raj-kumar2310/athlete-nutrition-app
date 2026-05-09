@@ -1,16 +1,14 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Home, User, Calculator, Trophy, Dumbbell, Activity } from 'lucide-react'
+import { Home, User, CalendarDays, TrendingUp, Search, Users } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 
 const tabs = [
-  { path: '/home',        icon: Home,       label: 'Home'    },
-  { path: '/training',    icon: Dumbbell,   label: 'Train'   },
-  { path: '/competition', icon: Trophy,     label: 'Compete' },
-  { path: '/injury', icon: Activity, label: 'Injury' },
-
-  { path: '/calculator',  icon: Calculator, label: 'Calc'    },
-  { path: '/profile',     icon: User,       label: 'Profile' },
-
+  { path: '/home',    icon: Home,        label: 'Home'    },
+  { path: '/daily',   icon: CalendarDays, label: "Today's Plan" },
+  { path: '/progress',icon: TrendingUp,   label: 'Progress' },
+  { path: '/search',  icon: Search,       label: 'Search'  },
+  { path: '/coach',   icon: Users,        label: 'Coach'   },
+  { path: '/profile', icon: User,         label: 'Profile' },
 ]
 
 export default function BottomNav() {

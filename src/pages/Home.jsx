@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Dumbbell, Trophy, Zap, Heart, Scale, Calculator, Sun, Moon, Activity, Shield } from 'lucide-react'
+import { Dumbbell, Trophy, Zap, Heart, Scale, Calculator, Sun, Moon, Activity, Shield, Search, Calendar } from 'lucide-react'
 import { useUserStore } from '../stores/userStore'
 import BottomNav from '../components/BottomNav'
 
@@ -13,6 +13,7 @@ const tabs = [
   { id: 'firstaid',    label: 'First Aid',            sublabel: 'Injuries • Recovery • Emergency',     icon: Shield,     color: '#FF3057', path: '/firstaid',    gradient: 'linear-gradient(135deg, #FF3057, #FF6B6B)' },
   { id: 'weight',      label: 'Weight Management',    sublabel: 'Cut · Bulk · Maintain',               icon: Scale,      color: '#00E676', path: '/weight',      gradient: 'linear-gradient(135deg, #00E676, #00BFA5)' },
   { id: 'calculator',  label: 'Nutrition Calculator', sublabel: 'Calories burned & intake',            icon: Calculator, color: '#FF8C00', path: '/calculator',  gradient: 'linear-gradient(135deg, #FF8C00, #FFB347)' },
+  { id: 'progress',    label: 'Progress Tracker',     sublabel: 'Weight · training · injuries',        icon: Calendar,   color: '#4FC3F7', path: '/progress',    gradient: 'linear-gradient(135deg, #4FC3F7, #0288D1)' },
 ]
 
 export default function Home() {
@@ -97,6 +98,37 @@ export default function Home() {
               ))}
             </motion.div>
           )}
+
+          {/* Quick Actions: Search + Daily Companion */}
+          <div style={{ display: 'flex', gap: 12, marginTop: 18 }}>
+            <button onClick={() => navigate('/search')} style={{
+              display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 14,
+              background: theme === 'dark' ? '#111' : '#fff', border: `1px solid ${border}`, cursor: 'pointer',
+              boxShadow: '0 6px 18px rgba(0,0,0,0.06)', flex: 1, transition: 'transform 0.12s ease'
+            }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: '#FF4D00', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Search size={20} color="#fff" />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 14, fontWeight: 800, color: text }}>Search</div>
+                <div style={{ color: text2, fontSize: 12 }}>Find workouts, injuries, nutrition</div>
+              </div>
+            </button>
+
+            <button onClick={() => navigate('/daily')} style={{
+              display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 14,
+              background: theme === 'dark' ? '#111' : '#fff', border: `1px solid ${border}`, cursor: 'pointer',
+              boxShadow: '0 6px 18px rgba(0,0,0,0.06)', flex: 1, transition: 'transform 0.12s ease'
+            }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'linear-gradient(135deg,#FFB347,#FF7A00)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Calendar size={20} color="#fff" />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 14, fontWeight: 800, color: text }}>Daily Companion</div>
+                <div style={{ color: text2, fontSize: 12 }}>Plan meals & timelines</div>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
 

@@ -22,6 +22,24 @@ export const useUserStore = create(
         gender: '', sport: '', goal: '', isOnboarded: false
       }),
 
+      // Coach / multiple athletes
+      isPremium: false,
+      athletes: [], // { id, name, sport, weight, age, goal, lastActivity, notes }
+      activeAthleteId: null,
+      addAthlete: (athlete) => {
+        const { isPremium, athletes } = get()
+        const limit = isPremium ? 50 : 10
+        if (athletes.length >= limit) return false
+        const id = Date.now().toString()
+        const entry = { id, ...athlete, lastActivity: null, notes: '' }
+        set({ athletes: [...athletes, entry] })
+        return id
+      },
+      updateAthlete: (id, patch) => set(state => ({ athletes: state.athletes.map(a => a.id === id ? { ...a, ...patch } : a) })),
+      removeAthlete: (id) => set(state => ({ athletes: state.athletes.filter(a => a.id !== id), activeAthleteId: state.activeAthleteId === id ? null : state.activeAthleteId })),
+      setActiveAthlete: (id) => set({ activeAthleteId: id }),
+      addCoachNote: (id, note) => set(state => ({ athletes: state.athletes.map(a => a.id === id ? { ...a, notes: (a.notes || '') + '\n' + note } : a) })),
+
       // Computed
       getBMI: () => {
         const { height, weight } = get()

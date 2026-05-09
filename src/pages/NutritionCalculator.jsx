@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { Flame, Zap, Dumbbell, Wind, Timer, ChevronDown, RotateCcw, TrendingUp, ArrowLeft } from 'lucide-react'
@@ -6,6 +6,8 @@ import { useUserStore } from '../stores/userStore'
 import { calculateCaloriesBurned, calculateMacros, calculateRecommendedIntake, calculateHydration } from '../utils/calorieCalculator'
 import { useTheme } from '../hooks/useTheme'
 import BottomNav from '../components/BottomNav'
+import CalculatorHistory from '../components/CalculatorHistory'
+import ShareMealPlan from '../components/ShareMealPlan'
 
 const activities = [
   { id: 'sprint_100m', label: '100M Sprint',      icon: Zap,        met: 23, color: '#FF4D00' },
@@ -21,6 +23,24 @@ const activities = [
   { id: 'football',    label: 'Football',         icon: Wind,       met: 9,  color: '#FF5722' },
   { id: 'badminton',   label: 'Badminton',        icon: Zap,        met: 7,  color: '#FF4081' },
 ]
+
+const HISTORY_KEY = 'calc-history'
+
+function loadHistory() {
+  if (typeof window === 'undefined') return []
+  try {
+    const raw = window.localStorage.getItem(HISTORY_KEY)
+    const parsed = raw ? JSON.parse(raw) : []
+    return Array.isArray(parsed) ? parsed.slice(0, 5) : []
+  } catch {
+    return []
+  }
+}
+
+function saveHistory(items) {
+  if (typeof window === 'undefined') return
+  window.localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, 5)))
+}
 
 function MacroBar({ label, grams, color, percent, delay, bg3, text3 }) {
   return (
@@ -46,6 +66,8 @@ export default function NutritionCalculator() {
   const [selected, setSelected] = useState(null)
   const [result, setResult] = useState(null)
   const [dropOpen, setDropOpen] = useState(false)
+  const [history, setHistory] = useState(() => loadHistory())
+  const resultRef = useRef(null)
 
   const calculate = () => {
     if (!selected || !weight || !duration) return
@@ -55,10 +77,38 @@ export default function NutritionCalculator() {
     const macros   = calculateMacros(intake, goal || 'performance')
     const hydration = calculateHydration(parseFloat(weight), parseFloat(duration))
     setResult({ burned, intake, macros, hydration, actColor: act.color })
+
+    const entry = {
+      id: `${Date.now()}-${act.id}`,
+      date: new Date().toISOString(),
+      activity: act.label,
+      duration: Number(duration),
+      weight: Number(weight),
+      burned,
+      intake,
+      macros,
+      timestamp: Date.now(),
+    }
+
+    setHistory(prev => {
+      const next = [entry, ...prev].slice(0, 5)
+      saveHistory(next)
+      return next
+    })
   }
 
   const selectedAct = activities.find(a => a.id === selected)
   const disabled = !selected || !weight || !duration
+
+  const buildShareText = () => {
+    if (!result || !selectedAct) return ''
+    return [
+      '🏃 My Nutrition Plan',
+      `  Activity: ${selectedAct.label}`,
+      `  Calories: ${result.burned} kcal | Carbs: ${result.macros.carbs}g | Protein: ${result.macros.protein}g`,
+      '  via AthleteEats App',
+    ].join('\n')
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: bg, paddingBottom: 80, transition: 'background 0.3s' }}>
@@ -134,6 +184,7 @@ export default function NutritionCalculator() {
         <AnimatePresence>
           {result && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
+              <div ref={resultRef}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
                 {[
                   { label: 'Burned',        value: result.burned, icon: Flame,      color: '#FF4D00' },
@@ -176,13 +227,34 @@ export default function NutritionCalculator() {
                 </div>
               </div>
 
+            </div>
+
               <motion.button whileTap={{ scale: 0.97 }} onClick={() => setResult(null)}
                 style={{ width: '100%', padding: '14px', background: 'transparent', border: `1px solid ${border}`, borderRadius: 12, cursor: 'pointer', fontFamily: "'Barlow Condensed', sans-serif", fontSize: 15, fontWeight: 700, letterSpacing: 2, color: text3, textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
                 <RotateCcw size={14} /> Reset
               </motion.button>
+
+              <div style={{ marginTop: 12 }}>
+                <ShareMealPlan targetRef={resultRef} buildShareText={buildShareText} />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
+
+        <div style={{ marginTop: 16 }}>
+          <CalculatorHistory
+            history={history}
+            onDelete={(id) => setHistory(prev => {
+              const next = prev.filter(item => item.id !== id)
+              saveHistory(next)
+              return next
+            })}
+            onClear={() => {
+              saveHistory([])
+              setHistory([])
+            }}
+          />
+        </div>
       </div>
       <BottomNav />
     </div>

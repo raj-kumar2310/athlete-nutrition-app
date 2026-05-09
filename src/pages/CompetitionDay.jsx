@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ChevronRight, Calculator, Clock, Scale, Search } from 'lucide-react'
 import { sportsData } from '../data/sportsData'
 import { useTheme } from '../hooks/useTheme'
 import { useUserStore } from '../stores/userStore'
 import BottomNav from '../components/BottomNav'
+import ShareMealPlan from '../components/ShareMealPlan'
 
 // ─── Pre-Event Precision Calculator ────────────────────────────
 function getPrecisionMeal(hoursLeft, bodyWeight) {
@@ -108,16 +109,32 @@ function getAvoidList(hours) {
 }
 
 // ─── Pre-Event Calculator UI ────────────────────────────────────
-function PreEventCalculator() {
+function PreEventCalculator({ eventName = 'Competition Event' }) {
   const { weight: uw } = useUserStore()
   const th = useTheme()
   const [bodyWeight, setBodyWeight] = useState(uw || '')
   const [hours, setHours] = useState('')
   const [minutes, setMinutes] = useState('')
   const [result, setResult] = useState(null)
+  const resultRef = useRef(null)
 
   const totalHours = (parseFloat(hours || 0)) + (parseFloat(minutes || 0) / 60)
   const canCalc = bodyWeight && (hours || minutes)
+  const buildShareText = () => {
+    if (!result) return ''
+    const mealLine = result.mealPlan.slice(0, 3).map(item => {
+      const units = item.unit === 'g' ? 'g' : ` ${item.unit}`
+      return `${item.food.replace(/\s*\([^)]*\)/g, '')} ${item.amount}${units}`
+    }).join(', ')
+
+    return [
+      '🏃 My Pre-Race Meal Plan',
+      `  Event: ${eventName}`,
+      `  ${Math.max(1, Math.floor(totalHours))} hrs before: ${mealLine}`,
+      `  Calories: ${result.totalCals} kcal | Carbs: ${result.totalCarbs}g | Protein: ${result.totalProtein}g`,
+      '  via AthleteEats App',
+    ].join('\n')
+  }
 
   const calculate = () => {
     if (!canCalc) return
@@ -199,6 +216,7 @@ function PreEventCalculator() {
       <AnimatePresence>
         {result && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <div ref={resultRef}>
 
             {/* Timing badge */}
             <div style={{ background: `${result.timing.color}15`, border: `1px solid ${result.timing.color}44`, borderRadius: 16, padding: '14px 18px', marginBottom: 12 }}>
@@ -276,10 +294,16 @@ function PreEventCalculator() {
               </div>
             </div>
 
+            </div>
+
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setResult(null); setHours(''); setMinutes(''); }}
               style={{ width: '100%', padding: '13px', background: 'transparent', border: `1px solid ${th.border}`, borderRadius: 12, cursor: 'pointer', fontFamily: "'Barlow Condensed', sans-serif", fontSize: 14, fontWeight: 700, letterSpacing: 2, color: th.text3, textTransform: 'uppercase' }}>
               Recalculate
             </motion.button>
+
+            <div style={{ marginTop: 12 }}>
+              <ShareMealPlan targetRef={resultRef} buildShareText={buildShareText} />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -340,7 +364,7 @@ function EventPage({ sport, event, onBack }) {
           ))}
         </motion.div>
       )}
-      {view === 'calculator' && <PreEventCalculator />}
+      {view === 'calculator' && <PreEventCalculator eventName={event.name} />}
     </motion.div>
   )
 }
@@ -435,10 +459,30 @@ function SportGroupsList({ tab, onSelectSport }) {
 // ─── Main Page ──────────────────────────────────────────────────
 export default function CompetitionDay() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [tab, setTab] = useState('aerobic')
   const [selectedSport, setSelectedSport] = useState(null)
   const [selectedEvent, setSelectedEvent] = useState(null)
   const { bg, bg2, border, text, text3 } = useTheme()
+
+  useEffect(() => {
+    const sportId = (searchParams.get('sportId') || '').trim()
+    const eventId = (searchParams.get('eventId') || '').trim()
+    if (!sportId && !eventId) return
+
+    const findIn = (bucket) => sportsData[bucket].find(s => s.id === sportId || s.events.some(e => e.id === eventId))
+    const bucket = findIn('aerobic') ? 'aerobic' : findIn('anaerobic') ? 'anaerobic' : null
+    if (!bucket) return
+
+    const sport = sportsData[bucket].find(s => s.id === sportId || s.events.some(e => e.id === eventId))
+    if (!sport) return
+
+    setTab(bucket)
+    setSelectedSport(sport)
+
+    const event = sport.events.find(e => e.id === eventId)
+    if (event) setSelectedEvent(event)
+  }, [searchParams])
 
   const goBack = () => {
     if (selectedEvent) { setSelectedEvent(null); return }

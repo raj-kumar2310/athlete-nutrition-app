@@ -139,9 +139,15 @@ ALWAYS respond with ONLY valid JSON in this exact structure (no markdown, no ext
 }`;
 
     try {
-      const groqKey = import.meta.env.VITE_GROQ_API_KEY;
+      const groqKey = (import.meta.env.VITE_GROQ_API_KEY || '').trim();
+      const groqBase = import.meta.env.VITE_GROQ_BASE || 'https://api.groq.com'
 
-      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      if (!groqKey || groqKey.includes('...') || groqKey === 'your_groq_api_key_here') {
+        setError('API Error: Invalid API Key. Set full VITE_GROQ_API_KEY in .env and restart dev server.')
+        return
+      }
+
+      const res = await fetch(`${groqBase}/openai/v1/chat/completions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -159,12 +165,14 @@ ALWAYS respond with ONLY valid JSON in this exact structure (no markdown, no ext
       });
 
       if (!res.ok) {
-        const errData = await res.json();
-        setError(`API Error: ${errData?.error?.message || res.status}`);
-        return;
+        let body
+        try { body = await res.json() } catch { body = await res.text() }
+        console.error('API error response:', res.status, body)
+        setError(`API Error: ${body?.error?.message || JSON.stringify(body) || res.status}`)
+        return
       }
 
-      const data = await res.json();
+      const data = await res.json()
       const raw = data.choices?.[0]?.message?.content || '';
       const parsed = parseResponse(raw);
 

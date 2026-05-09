@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ChevronRight, AlertTriangle, Heart, Activity, Zap, Shield, ChevronDown, ChevronUp } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 import BottomNav from '../components/BottomNav'
 
 // ─── All injury & first aid data ───────────────────────────────
-const categories = [
+export const categories = [
   {
     id: 'overload',
     label: 'Overload Injuries',
@@ -605,9 +605,24 @@ function CategoryPage({ cat, onBack, onSelectInjury }) {
 // ─── Main Page ──────────────────────────────────────────────────
 export default function FirstAid() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { bg, bg2, bg3, border, text, text2, text3 } = useTheme()
   const [selectedCat, setSelectedCat] = useState(null)
   const [selectedInjury, setSelectedInjury] = useState(null)
+
+  useEffect(() => {
+    const injuryParam = (searchParams.get('injury') || '').toLowerCase().trim()
+    if (!injuryParam) return
+
+    for (const cat of categories) {
+      const injury = cat.injuries.find(i => i.id.toLowerCase() === injuryParam || i.name.toLowerCase() === injuryParam)
+      if (injury) {
+        setSelectedCat(cat)
+        setSelectedInjury(injury)
+        return
+      }
+    }
+  }, [searchParams])
 
   const goBack = () => {
     if (selectedInjury) { setSelectedInjury(null); return }

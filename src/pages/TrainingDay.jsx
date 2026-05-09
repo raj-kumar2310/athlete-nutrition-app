@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Zap, Heart, Dumbbell, PersonStanding, ChevronRight, ArrowLeft, Calculator, RotateCcw, Timer, Shuffle } from 'lucide-react'
 import { useUserStore } from '../stores/userStore'
 import { useTheme } from '../hooks/useTheme'
 import BottomNav from '../components/BottomNav'
 
-const trainingTypes = [
+export const trainingTypes = [
   { id: 'speed',       icon: Zap,            label: 'Speed Training',        desc: 'Explosive sprints & high-intensity', color: '#FF4D00' },
   { id: 'endurance',   icon: Heart,          label: 'Endurance Training',    desc: 'Long-distance, sustained cardio',    color: '#4FC3F7' },
   { id: 'strength',    icon: Dumbbell,       label: 'Strength Training',     desc: 'Weights, resistance & power',        color: '#E63946' },
@@ -537,8 +537,16 @@ function TrainingDetail({ training, onBack }) {
 // ─── Main Page ──────────────────────────────────────────────────
 export default function TrainingDay() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [selected, setSelected] = useState(null)
   const { bg, bg2, border, text, text2, text3 } = useTheme()
+
+  useEffect(() => {
+    const typeParam = (searchParams.get('type') || '').toLowerCase().trim()
+    if (!typeParam) return
+    const match = trainingTypes.find(t => t.id === typeParam || t.label.toLowerCase() === typeParam)
+    if (match) setSelected(match)
+  }, [searchParams])
 
   return (
     <div style={{ minHeight: '100vh', background: bg, paddingBottom: 80, transition: 'background 0.3s' }}>
