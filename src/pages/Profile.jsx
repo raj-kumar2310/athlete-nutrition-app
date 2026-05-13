@@ -9,6 +9,7 @@ import { useTheme } from '../hooks/useTheme'
 export default function Profile() {
   const navigate = useNavigate()
   const { name, age, height, weight, gender, sport, goal, getBMI, getTDEE, resetUser } = useUserStore()
+    const { logout } = useUserStore()
   const { bg, bg2, border, text, text2, text3 } = useTheme()
   const bmi = getBMI()
   const tdee = getTDEE()
@@ -27,12 +28,18 @@ export default function Profile() {
     <div style={{ minHeight: '100vh', background: bg, paddingBottom: 80 }}>
       <div style={{ padding: '56px 24px 24px', maxWidth: 480, margin: '0 auto' }}>
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 36, fontWeight: 900, color: text, margin: 0 }}>Profile</h1>
           <button onClick={() => navigate('/setup')} style={{ background: bg2, border: `1px solid ${border}`, borderRadius: 10, padding: '8px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, color: text2 }}>
             <Edit3 size={14} /> <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, letterSpacing: 1 }}>EDIT</span>
           </button>
         </div>
+        
+        {/* Logout button */}
+        <button onClick={() => { logout(); navigate('/login') }}
+          style={{ width: '100%', padding: '14px', background: 'linear-gradient(135deg, #FF3057 0%, #E91E63 100%)', border: 'none', borderRadius: 14, cursor: 'pointer', fontFamily: "'Barlow Condensed', sans-serif", fontSize: 15, fontWeight: 700, letterSpacing: 1, color: '#fff', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 24, boxShadow: '0 4px 16px rgba(255, 48, 87, 0.3)' }}>
+          <LogOut size={16} /> Logout
+        </button>
 
         {/* Avatar + Name */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28 }}>

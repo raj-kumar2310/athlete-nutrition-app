@@ -196,7 +196,7 @@ export default function Welcome() {
           <motion.button
             whileTap={{ scale: 0.97 }}
             whileHover={{ scale: 1.02 }}
-            onClick={() => navigate('/setup')}
+            onClick={() => navigate('/auth')}
             style={{
               width: '100%', padding: '18px',
               background: 'linear-gradient(135deg, #FF4D00, #FF7A00)',
@@ -207,7 +207,7 @@ export default function Welcome() {
               boxShadow: '0 8px 32px rgba(255,77,0,0.3)'
             }}
           >
-            Get Started
+            Explore App
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.97 }}
@@ -562,7 +562,7 @@ export default function Welcome() {
             <motion.button
               whileTap={{ scale: 0.97 }}
               whileHover={{ scale: 1.02 }}
-              onClick={() => navigate('/setup')}
+              onClick={() => navigate('/auth')}
               style={{
                 padding: '16px 40px',
                 background: 'linear-gradient(135deg, #FF4D00, #FF7A00)',

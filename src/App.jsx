@@ -5,6 +5,7 @@ import OnboardingTour from './components/OnboardingTour'
 import InstallPrompt from './components/InstallPrompt'
 import InjuryAssistant from './pages/Injuryassistant'
 import DailyCompanion from './pages/DailyCompanion'
+import Login from './pages/Login'
 
 
 // Pages
@@ -25,6 +26,7 @@ import { WeightManagement } from './pages/PerformanceRecoveryWeight'
 
 function App() {
   const { theme } = useUserStore()
+  const { isLoggedIn } = useUserStore()
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -35,6 +37,7 @@ function App() {
       <OnboardingTourWrapper />
       <InstallPrompt />
       <Routes>
+        <Route path="/auth" element={isLoggedIn ? <Navigate to="/home" replace /> : <Login />} />
         <Route path="/" element={<Welcome />} />
         <Route path="/setup" element={<PersonalInfo />} />
         <Route path="/home" element={<Home />} />

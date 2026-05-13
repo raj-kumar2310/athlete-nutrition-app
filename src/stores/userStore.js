@@ -4,6 +4,11 @@ import { persist } from 'zustand/middleware'
 export const useUserStore = create(
   persist(
     (set, get) => ({
+      // Auth
+      email: '',
+      password: '',
+      isLoggedIn: false,
+
       // Personal Info
       name: '',
       age: '',
@@ -16,6 +21,8 @@ export const useUserStore = create(
 
       // Actions
       setUserInfo: (info) => set({ ...info, isOnboarded: true }),
+        login: (email, password, userData) => set({ email, password, isLoggedIn: true, ...userData }),
+        logout: () => set({ email: '', password: '', isLoggedIn: false, name: '', age: '', height: '', weight: '', gender: '', sport: '', goal: '', isOnboarded: false }),
       updateField: (field, value) => set({ [field]: value }),
       resetUser: () => set({
         name: '', age: '', height: '', weight: '',
