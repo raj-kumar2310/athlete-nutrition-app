@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Home, User, CalendarDays, TrendingUp, Search, Users } from 'lucide-react'
+import { Home, User, CalendarDays, TrendingUp, Search } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 
 const tabs = [
@@ -7,7 +7,6 @@ const tabs = [
   { path: '/daily',   icon: CalendarDays, label: "Today's Plan" },
   { path: '/progress',icon: TrendingUp,   label: 'Progress' },
   { path: '/search',  icon: Search,       label: 'Search'  },
-  { path: '/coach',   icon: Users,        label: 'Coach'   },
   { path: '/profile', icon: User,         label: 'Profile' },
 ]
 

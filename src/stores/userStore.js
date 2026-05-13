@@ -47,7 +47,7 @@ export const useUserStore = create(
         const h = parseFloat(height) / 100
         return (parseFloat(weight) / (h * h)).toFixed(1)
       },
-        theme: 'dark', // default dark
+        theme: 'light', // default light
       toggleTheme: () => set(s => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
 
       getTDEE: () => {

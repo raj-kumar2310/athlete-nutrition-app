@@ -82,14 +82,10 @@ export default function Profile() {
           </div>
         )}
 
-        {/* Coach Mode button */}
+        {/* Reset button */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-          <button onClick={() => navigate('/coach-mode')}
-            style={{ flex: 1, padding: '12px', background: 'linear-gradient(135deg, #FFB347, #FFAA22)', border: 'none', borderRadius: 12, cursor: 'pointer', fontFamily: "'Barlow Condensed', sans-serif", fontSize: 15, fontWeight: 700, letterSpacing: 1, color: '#000', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-            <span style={{ fontSize: 14 }}>Coach Mode</span>
-          </button>
           <button onClick={() => { resetUser(); navigate('/') }}
-            style={{ padding: '12px', background: 'transparent', border: '1px solid #FF305733', borderRadius: 12, cursor: 'pointer', fontFamily: "'Barlow Condensed', sans-serif", fontSize: 15, fontWeight: 700, letterSpacing: 1, color: '#FF3057', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            style={{ flex: 1, padding: '12px', background: 'transparent', border: '1px solid #FF305733', borderRadius: 12, cursor: 'pointer', fontFamily: "'Barlow Condensed', sans-serif", fontSize: 15, fontWeight: 700, letterSpacing: 1, color: '#FF3057', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
             <LogOut size={14} /> Reset
           </button>
         </div>

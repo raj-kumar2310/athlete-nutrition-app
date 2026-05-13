@@ -18,7 +18,6 @@ import CompetitionDay from './pages/CompetitionDay'
 import NutritionCalculator from './pages/NutritionCalculator'
 import ProgressTracker from './pages/ProgressTracker'
 import Profile from './pages/Profile'
-import CoachMode from './pages/CoachMode'
 import SearchPage from './pages/SearchPage'
 import { Performance } from './pages/PerformanceRecoveryWeight'
 import { Recovery } from './pages/PerformanceRecoveryWeight'
@@ -52,8 +51,7 @@ function App() {
         <Route path="/calculator" element={<NutritionCalculator />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/coach-mode" element={<CoachMode />} />
-        <Route path="/coach" element={<CoachMode />} />
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
