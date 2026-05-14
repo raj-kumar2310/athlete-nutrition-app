@@ -7,6 +7,13 @@ import {
 } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
 import { useUserStore } from "../stores/userStore";
+import {
+  aiConfig,
+  buildAiChatUrl,
+  getAiErrorMessage,
+  getAiHeaders,
+  isAiApiKeyConfigured,
+} from "../config/aiConfig";
 import BottomNav from "../components/BottomNav";
 
 function Section({ title, icon, color, children, defaultOpen = false }) {
@@ -139,22 +146,16 @@ ALWAYS respond with ONLY valid JSON in this exact structure (no markdown, no ext
 }`;
 
     try {
-      const groqKey = (import.meta.env.VITE_GROQ_API_KEY || '').trim();
-      const groqBase = import.meta.env.VITE_GROQ_BASE || 'https://api.groq.com'
-
-      if (!groqKey || groqKey.includes('...') || groqKey === 'your_groq_api_key_here' || groqKey === 'your_new_groq_api_key_here') {
-        setError('API Error: Missing or invalid API Key. Get a key from console.groq.com, add to .env as VITE_GROQ_API_KEY, then restart dev server.')
+      if (!isAiApiKeyConfigured()) {
+        setError('AI service temporarily unavailable. Please try again later.')
         return
       }
 
-      const res = await fetch(`${groqBase}/openai/v1/chat/completions`, {
+      const res = await fetch(buildAiChatUrl(), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${groqKey}`
-        },
+        headers: getAiHeaders(),
         body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
+          model: aiConfig.model,
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: athleteCtx + '\n\nInjury description: ' + description }
@@ -168,29 +169,30 @@ ALWAYS respond with ONLY valid JSON in this exact structure (no markdown, no ext
         let body
         try { body = await res.json() } catch { body = await res.text() }
         console.error('API error response:', res.status, body)
-        
-        if (res.status === 401) {
-          setError('API Error: Invalid or expired API Key. Get a new key from console.groq.com, update .env file, and restart dev server.')
-        } else if (res.status === 429) {
-          setError('API Error: Rate limit exceeded. Please wait a moment and try again.')
-        } else {
-          setError(`API Error: ${body?.error?.message || JSON.stringify(body) || res.status}`)
-        }
+
+        setError(getAiErrorMessage(res.status, body))
         return
       }
 
-      const data = await res.json()
+      let data
+      try {
+        data = await res.json()
+      } catch {
+        setError('AI service returned an invalid response. Please try again later.')
+        return
+      }
+
       const raw = data.choices?.[0]?.message?.content || '';
       const parsed = parseResponse(raw);
 
       if (parsed) {
         setResult(parsed);
       } else {
-        setError('Could not parse response. Please try again.');
+        setError('AI service returned an invalid response. Please try again later.');
       }
     } catch (err) {
       console.error(err);
-      setError('Network error. Please check connection.');
+      setError('AI service temporarily unavailable. Please try again later.');
     } finally {
       setLoading(false);
     }
