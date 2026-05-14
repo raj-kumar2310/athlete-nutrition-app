@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../stores/userStore'
 import { useTheme } from '../hooks/useTheme'
+import { useResponsive } from '../hooks/useResponsive'
 import { Eye, EyeOff, LogIn, UserPlus } from 'lucide-react'
 
 const sports = [
@@ -21,6 +22,7 @@ export default function Login() {
   const navigate = useNavigate()
   const { login } = useUserStore()
   const theme = useTheme()
+  const { isMobile, padding } = useResponsive()
   
   const [mode, setMode] = useState('login') // 'login' or 'signup'
   const [showPassword, setShowPassword] = useState(false)

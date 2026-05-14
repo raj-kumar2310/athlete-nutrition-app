@@ -43,6 +43,19 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
+  width: 100%;
+  overflow-y: auto;
+}
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Reduce motion for accessibility and performance */
@@ -68,6 +81,46 @@ body {
   input, textarea {
     font-size: 16px; /* Prevent zoom on focus */
   }
+
+  /* Reduce blur on mobile for better performance */
+  [style*="backdropFilter"] {
+    backdrop-filter: blur(5px) !important;
+  }
+
+  /* Prevent overflow on mobile */
+  main, div[style*="minHeight"] {
+    overflow-x: hidden;
+  }
+
+  /* Optimize animations on mobile */
+  @media (prefers-reduced-motion: no-preference) {
+    * {
+      transform-gpu: translateZ(0);
+    }
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+  }
+
+  /* Aggressive overflow prevention */
+  html, body {
+    width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Reduce padding on tiny screens */
+  [style*="padding: '24px"] {
+    padding: 16px !important;
+  }
+
+  /* Stack elements better */
+  [style*="gridTemplateColumns: '1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* scrollbar */
@@ -86,5 +139,64 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+/* Responsive grid fix for mobile */
+@media (max-width: 640px) {
+  [style*="gridTemplateColumns: '1fr 1fr'"],
+  [style*='gridTemplateColumns: "1fr 1fr"'] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Prevent horizontal overflow on mobile */
+  div[style*="maxWidth: 480"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Reduce padding on small screens */
+  div[style*="padding: '24px"] {
+    padding: 16px !important;
+  }
+
+  /* Optimize card sizes */
+  button[style*="padding: 20"] {
+    padding: 16px !important;
+  }
+
+  /* Fix font sizes on mobile */
+  h1[style*="fontSize"],
+  h2[style*="fontSize"],
+  h3[style*="fontSize"] {
+    font-size: inherit !important;
+  }
+}
+
+/* Ultra-responsive for very small phones */
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  /* Aggressive padding reduction */
+  [style*="padding: '24px"] {
+    padding: 12px !important;
+  }
+
+  [style*="padding: '56px"] {
+    padding-top: 40px !important;
+    padding-bottom: 16px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  /* Reduce gaps */
+  [style*="gap: 24"],
+  [style*="gap: 16"] {
+    gap: 12px !important;
+  }
 }
 

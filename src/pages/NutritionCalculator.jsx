@@ -5,6 +5,7 @@ import { Flame, Zap, Dumbbell, Wind, Timer, ChevronDown, RotateCcw, TrendingUp, 
 import { useUserStore } from '../stores/userStore'
 import { calculateCaloriesBurned, calculateMacros, calculateRecommendedIntake, calculateHydration } from '../utils/calorieCalculator'
 import { useTheme } from '../hooks/useTheme'
+import { useResponsive } from '../hooks/useResponsive'
 import BottomNav from '../components/BottomNav'
 import CalculatorHistory from '../components/CalculatorHistory'
 import ShareMealPlan from '../components/ShareMealPlan'
@@ -61,6 +62,7 @@ export default function NutritionCalculator() {
   const navigate = useNavigate()
   const { weight: userWeight, goal } = useUserStore()
   const { bg, bg2, bg3, border, text, text2, text3, input } = useTheme()
+  const { isMobile, padding } = useResponsive()
   const [weight, setWeight] = useState(userWeight || '')
   const [duration, setDuration] = useState('')
   const [selected, setSelected] = useState(null)

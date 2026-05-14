@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ChevronRight, Calculator, Clock, Scale, Search } from 'lucide-react'
 import { sportsData } from '../data/sportsData'
 import { useTheme } from '../hooks/useTheme'
+import { useResponsive } from '../hooks/useResponsive'
 import { useUserStore } from '../stores/userStore'
 import BottomNav from '../components/BottomNav'
 import ShareMealPlan from '../components/ShareMealPlan'
@@ -464,6 +465,7 @@ export default function CompetitionDay() {
   const [selectedSport, setSelectedSport] = useState(null)
   const [selectedEvent, setSelectedEvent] = useState(null)
   const { bg, bg2, border, text, text3 } = useTheme()
+  const { isMobile, padding } = useResponsive()
 
   useEffect(() => {
     const sportId = (searchParams.get('sportId') || '').trim()

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Dumbbell, Trophy, Zap, Heart, Scale, Calculator, Sun, Moon, Activity, Shield, Search, Calendar, Cloud } from 'lucide-react'
 import { useUserStore } from '../stores/userStore'
 import { useMobileOptimization } from '../hooks/useMobileOptimization'
+import { useResponsive } from '../hooks/useResponsive'
 import BottomNav from '../components/BottomNav'
 
 const tabs = [
@@ -22,6 +23,7 @@ export default function Home() {
   const navigate = useNavigate()
   const { name, sport, getTDEE, getBMI, theme, toggleTheme } = useUserStore()
   const { isMobile, animationConfig } = useMobileOptimization()
+  const { textHeading, textLg, padding, gapMedium, gapSmall } = useResponsive()
   const tdee = getTDEE()
   const bmi  = getBMI()
 
@@ -37,33 +39,35 @@ export default function Home() {
   const cardBorder = (color) => theme === 'dark' ? `${color}22` : `${color}44`
 
   return (
-    <div style={{ minHeight: '100vh', background: bg, paddingBottom: 80, transition: 'background 0.3s' }}>
+    <div style={{ minHeight: '100vh', background: bg, paddingBottom: 100, transition: 'background 0.3s', width: '100%', overflow: 'hidden' }}>
 
       {/* Header */}
       <div style={{
-        padding: '56px 24px 24px',
+        padding: `${isMobile ? '48px' : '56px'} ${padding} 24px`,
         background: theme === 'dark'
           ? 'linear-gradient(180deg, #0f0f0f 0%, #080808 100%)'
           : 'linear-gradient(180deg, #ffffff 0%, #f5f5f5 100%)',
         borderBottom: `1px solid ${border}`,
-        transition: 'all 0.3s'
+        transition: 'all 0.3s',
+        width: '100%',
+        boxSizing: 'border-box'
       }}>
-        <div style={{ maxWidth: 480, margin: '0 auto' }}>
+        <div style={{ maxWidth: 480, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
 
           {/* Top row */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: gapSmall }}>
             <motion.div 
               initial={{ opacity: 0, y: -10 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: animationConfig.duration }}
             >
-              <p style={{ color: text3, fontSize: 13, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 2, textTransform: 'uppercase', marginBottom: 4 }}>
+              <p style={{ color: text3, fontSize: isMobile ? 11 : 13, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 2, textTransform: 'uppercase', marginBottom: 4 }}>
                 {greeting}
               </p>
-              <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 36, fontWeight: 900, color: text, letterSpacing: -0.5, margin: '0 0 4px' }}>
+              <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: isMobile ? 28 : 36, fontWeight: 900, color: text, letterSpacing: -0.5, margin: '0 0 4px' }}>
                 {name ? name.split(' ')[0] : 'Athlete'} <span style={{ color: '#FF4D00' }}>⚡</span>
               </h1>
-              {sport && <p style={{ color: text2, fontSize: 13 }}>{sport} • Ready to perform</p>}
+              {sport && <p style={{ color: text2, fontSize: 12 }}>{sport} • Ready to perform</p>}
             </motion.div>
 
             {/* Theme Toggle */}
@@ -92,16 +96,16 @@ export default function Home() {
               initial={{ opacity: 0, y: 10 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ delay: animationConfig.delay, duration: animationConfig.duration }}
-              style={{ display: 'flex', gap: 12, marginTop: 20 }}>
+              style={{ display: 'flex', gap: gapMedium, marginTop: 20, width: '100%', boxSizing: 'border-box' }}>
               {[
                 { label: 'Daily Calories', value: tdee.toLocaleString(), unit: 'kcal', color: '#FF4D00' },
                 { label: 'BMI',            value: bmi || '--',           unit: '',     color: '#4FC3F7' },
               ].map(stat => (
-                <div key={stat.label} style={{ flex: 1, background: bg2, border: `1px solid ${border}`, borderRadius: 14, padding: '14px 16px', transition: 'all 0.3s' }}>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 26, fontWeight: 900, color: stat.color }}>
-                    {stat.value}<span style={{ fontSize: 14, color: text3 }}> {stat.unit}</span>
+                <div key={stat.label} style={{ flex: 1, background: bg2, border: `1px solid ${border}`, borderRadius: 14, padding: isMobile ? '12px 12px' : '14px 16px', transition: 'all 0.3s' }}>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: isMobile ? 20 : 26, fontWeight: 900, color: stat.color }}>
+                    {stat.value}<span style={{ fontSize: isMobile ? 11 : 14, color: text3 }}> {stat.unit}</span>
                   </div>
-                  <div style={{ color: text3, fontSize: 11, marginTop: 2, letterSpacing: 1, textTransform: 'uppercase', fontFamily: "'Barlow Condensed', sans-serif" }}>
+                  <div style={{ color: text3, fontSize: isMobile ? 10 : 11, marginTop: 2, letterSpacing: 1, textTransform: 'uppercase', fontFamily: "'Barlow Condensed', sans-serif" }}>
                     {stat.label}
                   </div>
                 </div>
@@ -110,32 +114,32 @@ export default function Home() {
           )}
 
           {/* Quick Actions: Search + Daily Companion */}
-          <div style={{ display: 'flex', gap: 12, marginTop: 18 }}>
+          <div style={{ display: 'flex', gap: gapMedium, marginTop: 18, width: '100%', boxSizing: 'border-box' }}>
             <button onClick={() => navigate('/search')} style={{
-              display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 14,
+              display: 'flex', alignItems: 'center', gap: gapMedium, padding: isMobile ? '10px 12px' : '12px 16px', borderRadius: 14,
               background: theme === 'dark' ? '#111' : '#fff', border: `1px solid ${border}`, cursor: 'pointer',
-              boxShadow: '0 6px 18px rgba(0,0,0,0.06)', flex: 1, transition: 'transform 0.12s ease'
-            }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: '#FF4D00', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Search size={20} color="#fff" />
+              boxShadow: '0 6px 18px rgba(0,0,0,0.06)', flex: 1, transition: 'transform 0.12s ease', width: '100%', boxSizing: 'border-box'
+            }} onMouseEnter={e => !isMobile && (e.currentTarget.style.transform = 'translateY(-3px)')} onMouseLeave={e => !isMobile && (e.currentTarget.style.transform = 'translateY(0)')}>
+              <div style={{ width: isMobile ? 36 : 44, height: isMobile ? 36 : 44, borderRadius: 12, background: '#FF4D00', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Search size={isMobile ? 16 : 20} color="#fff" />
               </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 14, fontWeight: 800, color: text }}>Search</div>
-                <div style={{ color: text2, fontSize: 12 }}>Find workouts, injuries, nutrition</div>
+              <div style={{ textAlign: 'left', minWidth: 0 }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: isMobile ? 12 : 14, fontWeight: 800, color: text, whiteSpace: 'nowrap' }}>Search</div>
+                <div style={{ color: text2, fontSize: isMobile ? 11 : 12, whiteSpace: 'nowrap' }}>Find workouts</div>
               </div>
             </button>
 
             <button onClick={() => navigate('/daily')} style={{
-              display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 14,
+              display: 'flex', alignItems: 'center', gap: gapMedium, padding: isMobile ? '10px 12px' : '12px 16px', borderRadius: 14,
               background: theme === 'dark' ? '#111' : '#fff', border: `1px solid ${border}`, cursor: 'pointer',
-              boxShadow: '0 6px 18px rgba(0,0,0,0.06)', flex: 1, transition: 'transform 0.12s ease'
-            }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'linear-gradient(135deg,#FFB347,#FF7A00)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Calendar size={20} color="#fff" />
+              boxShadow: '0 6px 18px rgba(0,0,0,0.06)', flex: 1, transition: 'transform 0.12s ease', width: '100%', boxSizing: 'border-box'
+            }} onMouseEnter={e => !isMobile && (e.currentTarget.style.transform = 'translateY(-3px)')} onMouseLeave={e => !isMobile && (e.currentTarget.style.transform = 'translateY(0)')}>
+              <div style={{ width: isMobile ? 36 : 44, height: isMobile ? 36 : 44, borderRadius: 12, background: 'linear-gradient(135deg,#FFB347,#FF7A00)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Calendar size={isMobile ? 16 : 20} color="#fff" />
               </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 14, fontWeight: 800, color: text }}>Daily Companion</div>
-                <div style={{ color: text2, fontSize: 12 }}>Plan meals & timelines</div>
+              <div style={{ textAlign: 'left', minWidth: 0 }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: isMobile ? 12 : 14, fontWeight: 800, color: text, whiteSpace: 'nowrap' }}>Daily</div>
+                <div style={{ color: text2, fontSize: isMobile ? 11 : 12, whiteSpace: 'nowrap' }}>Plan meals</div>
               </div>
             </button>
           </div>
@@ -143,11 +147,11 @@ export default function Home() {
       </div>
 
       {/* Tabs Grid */}
-      <div style={{ padding: '24px', maxWidth: 480, margin: '0 auto' }}>
-        <p style={{ color: text3, fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', fontFamily: "'Barlow Condensed', sans-serif", marginBottom: 16 }}>
+      <div style={{ padding: `24px ${padding}`, maxWidth: 480, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
+        <p style={{ color: text3, fontSize: isMobile ? 10 : 11, letterSpacing: 2, textTransform: 'uppercase', fontFamily: "'Barlow Condensed', sans-serif", marginBottom: 16 }}>
           What's your focus today?
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: gapMedium }}>
           {tabs.map((tab, i) => {
             const Icon = tab.icon
             return (
@@ -156,24 +160,24 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.07, duration: 0.4 }}
-                whileTap={{ scale: 0.96 }}
-                whileHover={{ scale: 1.02 }}
+                whileTap={isMobile ? {} : { scale: 0.96 }}
+                whileHover={isMobile ? {} : { scale: 1.02 }}
                 onClick={() => navigate(tab.path)}
                 style={{
                   background: bg2, border: `1px solid ${cardBorder(tab.color)}`,
-                  borderRadius: 18, padding: 20, cursor: 'pointer',
+                  borderRadius: 18, padding: isMobile ? 16 : 20, cursor: 'pointer',
                   textAlign: 'left', position: 'relative', overflow: 'hidden',
-                  transition: 'all 0.3s'
+                  transition: 'all 0.3s', width: '100%', boxSizing: 'border-box'
                 }}
               >
                 <div style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: `radial-gradient(circle, ${tab.color}18 0%, transparent 70%)`, pointerEvents: 'none' }} />
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: tab.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14, boxShadow: `0 4px 16px ${tab.color}33` }}>
-                  <Icon size={20} color="#fff" strokeWidth={2} />
+                <div style={{ width: isMobile ? 36 : 44, height: isMobile ? 36 : 44, borderRadius: 12, background: tab.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: isMobile ? 10 : 14, boxShadow: `0 4px 16px ${tab.color}33` }}>
+                  <Icon size={isMobile ? 16 : 20} color="#fff" strokeWidth={2} />
                 </div>
-                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 16, fontWeight: 800, color: text, letterSpacing: 0.3, marginBottom: 4 }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: isMobile ? 14 : 16, fontWeight: 800, color: text, letterSpacing: 0.3, marginBottom: 4 }}>
                   {tab.label}
                 </div>
-                <div style={{ color: text2, fontSize: 11, lineHeight: 1.4 }}>
+                <div style={{ color: text2, fontSize: isMobile ? 10 : 11, lineHeight: 1.4 }}>
                   {tab.sublabel}
                 </div>
               </motion.button>

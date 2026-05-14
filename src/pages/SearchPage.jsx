@@ -5,6 +5,7 @@ import { ArrowLeft, Search, Trophy, Dumbbell, ShieldAlert, Leaf, Clock, X } from
 import { sportsData } from '../data/sportsData'
 import { categories } from './FirstAid'
 import { useTheme } from '../hooks/useTheme'
+import { useResponsive } from '../hooks/useResponsive'
 import { useSearchStore } from '../stores/searchStore'
 import BottomNav from '../components/BottomNav'
 
@@ -56,6 +57,7 @@ export default function SearchPage() {
   const navigate = useNavigate()
   const inputRef = useRef(null)
   const { bg, bg2, bg3, border, text, text2, text3, input } = useTheme()
+  const { isMobile, padding } = useResponsive()
   const recent = useSearchStore(s => s.recent)
   const addRecent = useSearchStore(s => s.addRecent)
   const clearRecent = useSearchStore(s => s.clearRecent)

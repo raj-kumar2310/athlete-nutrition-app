@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, TrendingDown, Zap, AlertCircle, CheckCircle, Plus, Trash2, Flame, Clock, Target } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../hooks/useTheme'
+import { useResponsive } from '../hooks/useResponsive'
 import BottomNav from '../components/BottomNav'
 
 const WEIGHT_LOG_KEY = 'weight-log'
@@ -795,6 +796,7 @@ function PreparationTab({ theme }) {
 export default function ProgressTracker() {
   const navigate = useNavigate()
   const theme = useTheme()
+  const { isMobile, padding } = useResponsive()
   const [activeTab, setActiveTab] = useState('performance')
 
   const tabs = [

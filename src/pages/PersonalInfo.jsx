@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import { useUserStore } from '../stores/userStore'
 import { useTheme } from '../hooks/useTheme'
+import { useResponsive } from '../hooks/useResponsive'
 
 const sports = [
   'Athletics', 'Swimming', 'Cycling', 'Weightlifting', 'Gymnastics',
@@ -22,6 +23,7 @@ export default function PersonalInfo() {
   const navigate = useNavigate()
   const setUserInfo = useUserStore(s => s.setUserInfo)
   const { bg, bg2, bg3, border, text, text2, text3, input, dark } = useTheme()
+  const { isMobile, padding } = useResponsive()
 
   const [form, setForm] = useState({
     name: '', age: '', email: '', height: '',

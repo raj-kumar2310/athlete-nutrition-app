@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Zap, Heart, Dumbbell, PersonStanding, ChevronRight, ArrowLeft, Calculator, RotateCcw, Timer, Shuffle } from 'lucide-react'
 import { useUserStore } from '../stores/userStore'
 import { useTheme } from '../hooks/useTheme'
+import { useResponsive } from '../hooks/useResponsive'
 import BottomNav from '../components/BottomNav'
 
 export const trainingTypes = [
@@ -540,6 +541,7 @@ export default function TrainingDay() {
   const [searchParams] = useSearchParams()
   const [selected, setSelected] = useState(null)
   const { bg, bg2, border, text, text2, text3 } = useTheme()
+  const { isMobile, padding } = useResponsive()
 
   useEffect(() => {
     const typeParam = (searchParams.get('type') || '').toLowerCase().trim()

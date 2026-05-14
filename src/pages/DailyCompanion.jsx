@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, ChevronDown, ChevronUp, Check, Clock, Zap, Heart, Dumbbell, PersonStanding, Shuffle, Trophy, Moon } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
+import { useResponsive } from '../hooks/useResponsive'
 import { useDailyStore, generatePlan } from '../stores/dailyStore'
 import BottomNav from '../components/BottomNav'
 import MealReminder from '../components/MealReminder'
@@ -163,6 +164,7 @@ function TimelineItem({ item, expanded, onToggle, onToggleDone, now }) {
 export default function DailyCompanion() {
   const navigate = useNavigate()
   const { bg, bg2, bg3, border, text, text2, text3, input } = useTheme()
+  const { isMobile, padding } = useResponsive()
   const { plan, savePlan, clearPlan, toggleMealDone } = useDailyStore()
 
   const [step, setStep] = useState(plan ? 4 : 1)

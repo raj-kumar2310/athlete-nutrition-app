@@ -4,6 +4,7 @@ import { ArrowLeft, Moon, Star, Zap, AlertCircle, CheckCircle2, Clock, Droplet, 
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../hooks/useTheme'
 import { useMobileOptimization } from '../hooks/useMobileOptimization'
+import { useResponsive } from '../hooks/useResponsive'
 import BottomNav from '../components/BottomNav'
 
 const recommendedFoods = [
@@ -36,6 +37,7 @@ export default function SleepNutrition() {
   const navigate = useNavigate()
   const { theme, bg, bg2, bg3, border, border2, text, text2, text3 } = useTheme()
   const { isMobile, animationConfig } = useMobileOptimization()
+  const { padding, gapMedium, textHeading, blurIntensity, blurIntensityStrong } = useResponsive()
   const [checkedItems, setCheckedItems] = useState({})
   const [sleepScore, setSleepScore] = useState(72)
   const [recoveryScore, setRecoveryScore] = useState(68)
@@ -73,18 +75,20 @@ export default function SleepNutrition() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: bg, paddingBottom: 100, transition: 'background 0.3s' }}>
+    <div style={{ minHeight: '100vh', background: bg, paddingBottom: 120, transition: 'background 0.3s', width: '100%', overflow: 'hidden' }}>
 
       {/* Header with Back Button */}
       <div style={{
-        padding: '16px 24px 24px',
+        padding: `16px ${padding} 24px`,
         background: theme === 'dark'
           ? 'linear-gradient(180deg, rgba(79, 195, 247, 0.05) 0%, transparent 100%)'
           : 'linear-gradient(180deg, rgba(79, 195, 247, 0.08) 0%, transparent 100%)',
         borderBottom: `1px solid ${border}`,
-        backdropFilter: 'blur(10px)',
+        backdropFilter: `blur(${blurIntensity})`,
+        width: '100%',
+        boxSizing: 'border-box'
       }}>
-        <div style={{ maxWidth: 480, margin: '0 auto' }}>
+        <div style={{ maxWidth: 480, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
           <button
             onClick={() => navigate(-1)}
             style={{
@@ -95,34 +99,34 @@ export default function SleepNutrition() {
               display: 'flex',
               alignItems: 'center',
               gap: 8,
-              fontSize: 14,
+              fontSize: isMobile ? 12 : 14,
               marginBottom: 16,
               fontFamily: "'Barlow Condensed', sans-serif",
               fontWeight: 600,
               transition: 'all 0.2s',
             }}
-            onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
-            onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+            onMouseEnter={e => !isMobile && (e.currentTarget.style.opacity = '0.7')}
+            onMouseLeave={e => !isMobile && (e.currentTarget.style.opacity = '1')}
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={isMobile ? 18 : 20} />
             Back
           </button>
 
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
             <h1 style={{
               fontFamily: "'Barlow Condensed', sans-serif",
-              fontSize: 36,
+              fontSize: isMobile ? 28 : 36,
               fontWeight: 900,
               color: text,
               margin: 0,
               letterSpacing: -0.5,
               display: 'flex',
               alignItems: 'center',
-              gap: 12,
+              gap: isMobile ? 8 : 12,
             }}>
-              <span style={{ fontSize: 40 }}>🌙</span> Sleep Nutrition
+              <span style={{ fontSize: isMobile ? 32 : 40 }}>🌙</span> Sleep Nutrition
             </h1>
-            <p style={{ color: text2, fontSize: 13, marginTop: 8, lineHeight: 1.5 }}>
+            <p style={{ color: text2, fontSize: isMobile ? 12 : 13, marginTop: 8, lineHeight: 1.5 }}>
               Optimize your nighttime nutrition for better recovery & sleep quality
             </p>
           </motion.div>
@@ -131,7 +135,7 @@ export default function SleepNutrition() {
 
       {/* Main Content */}
       <motion.div
-        style={{ padding: '24px', maxWidth: 480, margin: '0 auto' }}
+        style={{ padding: `24px ${padding}`, maxWidth: 480, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -146,14 +150,16 @@ export default function SleepNutrition() {
               : 'linear-gradient(135deg, rgba(79, 195, 247, 0.08) 0%, rgba(206, 147, 216, 0.04) 100%)',
             border: `1.5px solid ${theme === 'dark' ? 'rgba(79, 195, 247, 0.3)' : 'rgba(79, 195, 247, 0.2)'}`,
             borderRadius: 18,
-            padding: '20px',
+            padding: isMobile ? '16px' : '20px',
             marginBottom: 24,
-            backdropFilter: 'blur(20px)',
+            backdropFilter: `blur(${blurIntensityStrong})`,
             boxShadow: theme === 'dark'
-              ? '0 8px 32px rgba(79, 195, 247, 0.08)'
-              : '0 4px 16px rgba(79, 195, 247, 0.06)',
+              ? `0 8px 32px rgba(79, 195, 247, 0.06)`
+              : `0 4px 16px rgba(79, 195, 247, 0.04)`,
             position: 'relative',
             overflow: 'hidden',
+            width: '100%',
+            boxSizing: 'border-box'
           }}
         >
           <div style={{
@@ -166,9 +172,9 @@ export default function SleepNutrition() {
           }} />
 
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 10 : 12, marginBottom: 12 }}>
               <div style={{
-                width: 44, height: 44,
+                width: isMobile ? 36 : 44, height: isMobile ? 36 : 44,
                 borderRadius: 12,
                 background: 'linear-gradient(135deg, #4FC3F7, #81D4FA)',
                 display: 'flex',
@@ -176,24 +182,24 @@ export default function SleepNutrition() {
                 justifyContent: 'center',
                 boxShadow: '0 4px 12px rgba(79, 195, 247, 0.3)',
               }}>
-                <Zap size={22} color="#fff" />
+                <Zap size={isMobile ? 18 : 22} color="#fff" />
               </div>
-              <h3 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 18, fontWeight: 800, color: text, margin: 0 }}>
+              <h3 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: isMobile ? 16 : 18, fontWeight: 800, color: text, margin: 0 }}>
                 AI Sleep Recommendation
               </h3>
             </div>
             <p style={{
               color: text,
-              fontSize: 14,
+              fontSize: isMobile ? 13 : 14,
               lineHeight: 1.6,
               margin: 0,
               fontWeight: 500,
             }}>
               "Based on your high-intensity training today, consume high-protein slow-digesting foods like paneer or Greek yogurt 2-3 hours before sleep. Add magnesium-rich almonds and warm chamomile tea for optimal overnight muscle recovery and deep sleep."
             </p>
-            <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+            <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
               <span style={{
-                fontSize: 11,
+                fontSize: isMobile ? 10 : 11,
                 background: theme === 'dark' ? 'rgba(79, 195, 247, 0.2)' : 'rgba(79, 195, 247, 0.15)',
                 color: '#4FC3F7',
                 padding: '4px 10px',
@@ -205,7 +211,7 @@ export default function SleepNutrition() {
                 PERSONALIZED
               </span>
               <span style={{
-                fontSize: 11,
+                fontSize: isMobile ? 10 : 11,
                 background: theme === 'dark' ? 'rgba(206, 147, 216, 0.2)' : 'rgba(206, 147, 216, 0.15)',
                 color: '#CE93D8',
                 padding: '4px 10px',
@@ -223,7 +229,7 @@ export default function SleepNutrition() {
         {/* Sleep & Recovery Scores */}
         <motion.div
           variants={itemVariants}
-          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}
+          style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: gapMedium, marginBottom: 24 }}
         >
           {/* Sleep Quality Score */}
           <motion.div
@@ -513,7 +519,7 @@ export default function SleepNutrition() {
             Recommended Night Foods
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: gapMedium }}>
             {recommendedFoods.map((food, idx) => (
               <motion.div
                 key={idx}
@@ -617,7 +623,7 @@ export default function SleepNutrition() {
             Avoid at Night
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: gapMedium }}>
             {foodsToAvoid.map((food, idx) => (
               <motion.div
                 key={idx}

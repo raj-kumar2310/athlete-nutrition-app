@@ -4,6 +4,7 @@ import { User, Edit3, LogOut } from 'lucide-react'
 import { useUserStore } from '../stores/userStore'
 import BottomNav from '../components/BottomNav'
 import { useTheme } from '../hooks/useTheme'
+import { useResponsive } from '../hooks/useResponsive'
 
 
 export default function Profile() {
@@ -11,6 +12,7 @@ export default function Profile() {
   const { name, age, height, weight, gender, sport, goal, getBMI, getTDEE, resetUser } = useUserStore()
     const { logout } = useUserStore()
   const { bg, bg2, border, text, text2, text3 } = useTheme()
+  const { isMobile, padding } = useResponsive()
   const bmi = getBMI()
   const tdee = getTDEE()
 
