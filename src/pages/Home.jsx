@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Dumbbell, Trophy, Zap, Heart, Scale, Calculator, Sun, Moon, Activity, Shield, Search, Calendar } from 'lucide-react'
+import { Dumbbell, Trophy, Zap, Heart, Scale, Calculator, Sun, Moon, Activity, Shield, Search, Calendar, Cloud } from 'lucide-react'
 import { useUserStore } from '../stores/userStore'
+import { useMobileOptimization } from '../hooks/useMobileOptimization'
 import BottomNav from '../components/BottomNav'
 
 const tabs = [
@@ -14,11 +15,13 @@ const tabs = [
   { id: 'weight',      label: 'Weight Management',    sublabel: 'Cut · Bulk · Maintain',               icon: Scale,      color: '#00E676', path: '/weight',      gradient: 'linear-gradient(135deg, #00E676, #00BFA5)' },
   { id: 'calculator',  label: 'Nutrition Calculator', sublabel: 'Calories burned & intake',            icon: Calculator, color: '#FF8C00', path: '/calculator',  gradient: 'linear-gradient(135deg, #FF8C00, #FFB347)' },
   { id: 'progress',    label: 'Progress Tracker',     sublabel: 'Weight · training · injuries',        icon: Calendar,   color: '#4FC3F7', path: '/progress',    gradient: 'linear-gradient(135deg, #4FC3F7, #0288D1)' },
+  { id: 'sleep',       label: 'Sleep Nutrition',      sublabel: 'Recovery · Sleep quality · Nighttime nutrition', icon: Cloud,  color: '#4FC3F7', path: '/sleep-nutrition', gradient: 'linear-gradient(135deg, #4FC3F7, #81D4FA)' },
 ]
 
 export default function Home() {
   const navigate = useNavigate()
   const { name, sport, getTDEE, getBMI, theme, toggleTheme } = useUserStore()
+  const { isMobile, animationConfig } = useMobileOptimization()
   const tdee = getTDEE()
   const bmi  = getBMI()
 
@@ -49,7 +52,11 @@ export default function Home() {
 
           {/* Top row */}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: animationConfig.duration }}
+            >
               <p style={{ color: text3, fontSize: 13, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 2, textTransform: 'uppercase', marginBottom: 4 }}>
                 {greeting}
               </p>
@@ -63,9 +70,9 @@ export default function Home() {
             <motion.button
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.08 }}
+              transition={{ delay: animationConfig.delay, duration: animationConfig.duration }}
+              whileTap={isMobile ? undefined : { scale: 0.9 }}
+              whileHover={isMobile ? undefined : { scale: 1.08 }}
               onClick={toggleTheme}
               style={{
                 width: 44, height: 44, borderRadius: 12,
@@ -81,7 +88,10 @@ export default function Home() {
 
           {/* Stats Row */}
           {tdee && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5 }}
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ delay: animationConfig.delay, duration: animationConfig.duration }}
               style={{ display: 'flex', gap: 12, marginTop: 20 }}>
               {[
                 { label: 'Daily Calories', value: tdee.toLocaleString(), unit: 'kcal', color: '#FF4D00' },
