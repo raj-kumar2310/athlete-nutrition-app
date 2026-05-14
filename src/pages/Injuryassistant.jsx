@@ -142,8 +142,8 @@ ALWAYS respond with ONLY valid JSON in this exact structure (no markdown, no ext
       const groqKey = (import.meta.env.VITE_GROQ_API_KEY || '').trim();
       const groqBase = import.meta.env.VITE_GROQ_BASE || 'https://api.groq.com'
 
-      if (!groqKey || groqKey.includes('...') || groqKey === 'your_groq_api_key_here') {
-        setError('API Error: Invalid API Key. Set full VITE_GROQ_API_KEY in .env and restart dev server.')
+      if (!groqKey || groqKey.includes('...') || groqKey === 'your_groq_api_key_here' || groqKey === 'your_new_groq_api_key_here') {
+        setError('API Error: Missing or invalid API Key. Get a key from console.groq.com, add to .env as VITE_GROQ_API_KEY, then restart dev server.')
         return
       }
 
@@ -168,7 +168,14 @@ ALWAYS respond with ONLY valid JSON in this exact structure (no markdown, no ext
         let body
         try { body = await res.json() } catch { body = await res.text() }
         console.error('API error response:', res.status, body)
-        setError(`API Error: ${body?.error?.message || JSON.stringify(body) || res.status}`)
+        
+        if (res.status === 401) {
+          setError('API Error: Invalid or expired API Key. Get a new key from console.groq.com, update .env file, and restart dev server.')
+        } else if (res.status === 429) {
+          setError('API Error: Rate limit exceeded. Please wait a moment and try again.')
+        } else {
+          setError(`API Error: ${body?.error?.message || JSON.stringify(body) || res.status}`)
+        }
         return
       }
 
