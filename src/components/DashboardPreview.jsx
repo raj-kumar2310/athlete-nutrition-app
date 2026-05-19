@@ -91,8 +91,8 @@ const DashboardPreview = () => {
     <div className="relative w-full bg-black text-white overflow-hidden">
       {/* Background Gradients */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl" />
+        <div className="hidden md:block absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl" />
+        <div className="hidden md:block absolute bottom-0 right-1/4 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl" />
       </div>
 
       {/* Main Content */}
@@ -482,7 +482,7 @@ const DashboardPreview = () => {
               </motion.button>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {mealSuggestions.map((meal, index) => (
                 <motion.div
                   key={index}

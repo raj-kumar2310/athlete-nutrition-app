@@ -30,12 +30,12 @@ export default function BottomNav() {
       {tabs.map(({ path, icon: Icon, label }) => {
         const active = location.pathname === path
         return (
-          <button key={path} onClick={() => navigate(path)} style={{
-            flex: 1, padding: '12px 0', background: 'transparent',
+          <button aria-label={label} key={path} onClick={() => navigate(path)} style={{
+            flex: 1, padding: '10px 0', background: 'transparent',
             border: 'none', cursor: 'pointer', display: 'flex',
             flexDirection: 'column', alignItems: 'center', gap: 4,
             position: 'relative', transition: 'all 0.2s',
-            minWidth: 0
+            minWidth: 44, minHeight: 44, boxSizing: 'border-box'
           }}>
             {active && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 20, height: 2, background: '#FF4D00', borderRadius: 2 }} />}
             <Icon size={20} color={active ? '#FF4D00' : text3} strokeWidth={active ? 2.5 : 1.5} />

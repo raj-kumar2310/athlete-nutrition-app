@@ -80,7 +80,7 @@ const HeroSection = () => {
         
         {/* Animated Glow Orbs */}
         <motion.div
-          className="absolute top-20 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"
+          className="hidden md:block absolute top-20 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -89,7 +89,7 @@ const HeroSection = () => {
           transition={{ duration: 8, repeat: Infinity }}
         />
         <motion.div
-          className="absolute bottom-20 right-1/4 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl"
+          className="hidden md:block absolute bottom-20 right-1/4 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.3, 0.5, 0.3],
@@ -181,7 +181,7 @@ const HeroSection = () => {
           {/* Stats Section */}
           <motion.div
             variants={itemVariants}
-            className="grid grid-cols-3 gap-4 sm:gap-6 mb-20 max-w-md mx-auto sm:max-w-full"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-20 max-w-md mx-auto sm:max-w-full"
           >
             {stats.map((stat, index) => {
               const IconComponent = stat.icon;

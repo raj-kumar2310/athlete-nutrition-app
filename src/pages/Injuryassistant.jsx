@@ -12,6 +12,7 @@ import {
   buildAiChatUrl,
   getAiErrorMessage,
   getAiHeaders,
+  getAiFallbackErrorMessage,
   isAiApiKeyConfigured,
 } from "../config/aiConfig";
 import BottomNav from "../components/BottomNav";
@@ -33,6 +34,13 @@ function Section({ title, icon, color, children, defaultOpen = false }) {
         {open ? <ChevronUp size={16} color={text3} /> : <ChevronDown size={16} color={text3} />}
       </button>
       <AnimatePresence>
+      {/* Dev-only debug panel */}
+      {import.meta.env.DEV && debugInfo && (
+        <div style={{ position: 'fixed', left: 12, right: 12, bottom: 72, maxHeight: '30vh', overflow: 'auto', background: 'rgba(0,0,0,0.7)', color: '#fff', padding: 8, borderRadius: 8, fontSize: 12, zIndex: 200 }}>
+          <div style={{ fontWeight: 700, marginBottom: 6 }}>Debug: last request</div>
+          <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{JSON.stringify(debugInfo, null, 2)}</pre>
+        </div>
+      )}
         {open && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }}
             style={{ overflow: "hidden" }}>
@@ -88,6 +96,7 @@ export default function InjuryAssistant() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [debugInfo, setDebugInfo] = useState(null);
   const fileRef = useRef();
 
   const handleImage = (e) => {
@@ -151,44 +160,121 @@ ALWAYS respond with ONLY valid JSON in this exact structure (no markdown, no ext
         return
       }
 
-      const res = await fetch(buildAiChatUrl(), {
-        method: 'POST',
-        headers: getAiHeaders(),
-        body: JSON.stringify({
-          model: aiConfig.model,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: athleteCtx + '\n\nInjury description: ' + description }
-          ],
-          temperature: 0.3,
-          response_format: { type: 'json_object' }
-        })
-      });
+      const url = buildAiChatUrl();
+      const headers = getAiHeaders();
+      const payloadObj = {
+        model: aiConfig.model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: athleteCtx + '\n\nInjury description: ' + description }
+        ],
+        temperature: 0.3,
+        response_format: { type: 'json_object' }
+      };
+      const payload = JSON.stringify(payloadObj);
 
-      if (!res.ok) {
-        let body
-        try { body = await res.json() } catch { body = await res.text() }
-        console.error('API error response:', res.status, body)
+      // Masked headers for debug logging
+      const maskedHeaders = { ...headers };
+      if (maskedHeaders.Authorization) maskedHeaders.Authorization = maskedHeaders.Authorization.replace(/(Bearer\s+).{4,}$/, '$1****');
 
-        setError(getAiErrorMessage(res.status, body))
-        return
+      console.log('InjuryAssistant: request payload object', payloadObj);
+      console.log('InjuryAssistant: request headers', maskedHeaders);
+      console.log('InjuryAssistant: navigator.onLine', typeof navigator !== 'undefined' ? navigator.onLine : 'unknown');
+
+      setDebugInfo({ url, payload: payloadObj, headers: maskedHeaders, attempts: [] });
+
+      // Retry logic with exponential backoff
+      const maxAttempts = 3;
+      let attempt = 0;
+      let lastError = null;
+
+      console.log('InjuryAssistant: sending AI request', { url, headers, userAgent: navigator?.userAgent });
+
+      // If the configured base URL points to localhost, mobile devices won't be able to reach it
+      const base = (aiConfig.baseUrl || '').toLowerCase();
+      const host = (typeof window !== 'undefined' && window.location && window.location.hostname) ? window.location.hostname : '';
+      if ((base.includes('localhost') || base.includes('127.0.0.1')) && !host.includes('localhost') && host !== '127.0.0.1') {
+        console.warn('AI baseUrl appears to be localhost — this will not be reachable from mobile browsers.');
+        setError('AI API configured to a localhost endpoint which your mobile device cannot reach. Use a public API URL or a tunnel (ngrok) and set VITE_AI_BASE_URL accordingly.');
+        setLoading(false);
+        return;
       }
 
-      let data
-      try {
-        data = await res.json()
-      } catch {
-        setError('AI service returned an invalid response. Please try again later.')
-        return
+      while (attempt < maxAttempts) {
+        attempt += 1;
+        try {
+          const fetchOptions = { method: 'POST', headers, body: payload, mode: 'cors', credentials: 'omit' };
+          console.log(`InjuryAssistant: fetch attempt ${attempt} options:`, { ...fetchOptions, headers: maskedHeaders });
+          const res = await fetch(url, fetchOptions);
+
+          // Log status for debugging (mobile vs desktop differences)
+          console.log(`AI request attempt ${attempt} status:`, res.status);
+
+          if (!res.ok) {
+            let body;
+            try { body = await res.json(); } catch { body = await res.text(); }
+            console.error('API error response (full):', { status: res.status, body });
+
+            setDebugInfo((d) => ({ ...d, attempts: [...(d?.attempts || []), { attempt, status: res.status, body }] }));
+
+            // For non-retriable client errors, break and show message
+            if (res.status >= 400 && res.status < 500) {
+              setError(getAiErrorMessage(res.status, body));
+              return;
+            }
+
+            // server errors — allow retry
+            lastError = { status: res.status, body };
+            // small delay before retry
+            await new Promise(r => setTimeout(r, 500 * attempt));
+            continue;
+          }
+
+          let data;
+          try {
+            data = await res.json();
+          } catch (parseErr) {
+            console.error('Failed to parse JSON response:', parseErr);
+            setDebugInfo((d) => ({ ...d, attempts: [...(d?.attempts || []), { attempt, parseErr: String(parseErr) }] }));
+            lastError = { parseErr };
+            await new Promise(r => setTimeout(r, 400 * attempt));
+            continue;
+          }
+
+          const raw = data.choices?.[0]?.message?.content || '';
+          console.log('AI raw response snippet:', raw && raw.slice ? raw.slice(0, 500) : raw);
+
+          const parsed = parseResponse(raw);
+          if (parsed) {
+            setResult(parsed);
+            lastError = null;
+            break;
+          } else {
+            console.error('AI returned non-JSON or unexpected format', { raw });
+            lastError = { message: 'invalid_response', raw };
+            await new Promise(r => setTimeout(r, 400 * attempt));
+            continue;
+          }
+        } catch (fetchErr) {
+          // Typical on mobile when blocked by CORS or network issues
+          console.error(`Fetch attempt ${attempt} failed (full):`, fetchErr);
+          setDebugInfo((d) => ({ ...d, attempts: [...(d?.attempts || []), { attempt, fetchErr: String(fetchErr) }] }));
+          lastError = fetchErr;
+          // If this is a TypeError like 'Failed to fetch', it may be CORS or network-related
+          await new Promise(r => setTimeout(r, 600 * attempt));
+          continue;
+        }
       }
 
-      const raw = data.choices?.[0]?.message?.content || '';
-      const parsed = parseResponse(raw);
-
-      if (parsed) {
-        setResult(parsed);
-      } else {
-        setError('AI service returned an invalid response. Please try again later.');
+      if (lastError) {
+        console.error('AI request failed after retries:', lastError);
+        // If it looks like a network/CORS issue, provide a more helpful message to mobile users
+        const isTypeError = lastError instanceof TypeError || (lastError && lastError.message && lastError.message.toLowerCase().includes('failed to fetch'));
+        if (isTypeError) {
+          setError('Unable to reach AI service from this device. This may be a network or browser CORS restriction — try again on Wi‑Fi or a different browser.');
+        } else {
+          setError(getAiFallbackErrorMessage());
+        }
       }
     } catch (err) {
       console.error(err);
