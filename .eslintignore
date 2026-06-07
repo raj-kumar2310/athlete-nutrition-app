@@ -1,0 +1,6 @@
+vite-backup/dist/
+dist/
+.next/
+node_modules/
+public/
+\.cache/
