@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Testing Checklist - Athlete Nutrition App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #FF4D00, #FF7A00);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #FF4D00;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        
+        .section {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            color: #333;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #FF4D00;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #FF4D00;
+        }
+        
+        .checklist-item label {
+            flex: 1;
+            cursor: pointer;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        .checklist-item input[type="checkbox"]:checked + label {
+            color: #999;
+            text-decoration: line-through;
+        }
+        
+        .note {
+            background: #FFF3E0;
+            border-left: 4px solid #FF4D00;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .stat {
+            flex: 1;
+            background: #F5F5F5;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FF4D00;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF4D00, #FF7A00);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #FF4D00, #FF7A00);
+            color: white;
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:active {
+            background: #e0e0e0;
+        }
+        
+        .screen-size {
+            display: inline-block;
+            background: #FF4D00;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .emoji {
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px;
+                border-radius: 12px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="emoji">📱</span>Mobile Testing Checklist</h1>
+        <p class="subtitle">Athlete Nutrition App - Complete responsiveness verification</p>
+        
+        <!-- Home Page -->
+        <div class="section">
+            <div class="section-title"><span class="emoji">🏠</span>Home Page</div>
+            <div class="checklist-item">
+                <input type="checkbox" id="h1">
+                <label for="h1">Greeting displays properly (not truncated)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="h2">
+                <label for="h2">Theme toggle button is visible and clickable</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="h3">
+                <label for="h3">Stat cards (TDEE, BMI) display in grid</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="h4">
+                <label for="h4">Feature cards scroll/stack without overflow</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="h5">
+                <label for="h5">Bottom navigation is fixed and accessible</label>
+            </div>
+            <div class="note">✓ Test at: 375px, 390px, 768px</div>
+        </div>
+        
+        <!-- Login/Signup -->
+        <div class="section">
+            <div class="section-title"><span class="emoji">🔐</span>Login & Signup</div>
+            <div class="checklist-item">
+                <input type="checkbox" id="l1">
+                <label for="l1">Form fields are full width with padding</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="l2">
+                <label for="l2">Input font size is 16px (no zoom on focus)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="l3">
+                <label for="l3">Select dropdowns are mobile-friendly</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="l4">
+                <label for="l4">Error messages display clearly</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="l5">
+                <label for="l5">Buttons are large enough to tap (44x44px)</label>
+            </div>
+            <div class="note">✓ Test keyboard behavior and auto-fill</div>
+        </div>
+        
+        <!-- Nutrition Calculator -->
+        <div class="section">
+            <div class="section-title"><span class="emoji">🥗</span>Nutrition Calculator</div>
+            <div class="checklist-item">
+                <input type="checkbox" id="n1">
+                <label for="n1">Activity dropdown works on mobile</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="n2">
+                <label for="n2">Input fields accept touch/keyboard</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="n3">
+                <label for="n3">Result cards display nicely on small screen</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="n4">
+                <label for="n4">Macro progress bars are visible</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="n5">
+                <label for="n5">History list scrolls smoothly</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="n6">
+                <label for="n6">Share button works</label>
+            </div>
+            <div class="note">✓ Test all 12 activity types</div>
+        </div>
+        
+        <!-- Progress Tracker -->
+        <div class="section">
+            <div class="section-title"><span class="emoji">📊</span>Progress Tracker</div>
+            <div class="checklist-item">
+                <input type="checkbox" id="p1">
+                <label for="p1">Charts scale responsively</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="p2">
+                <label for="p2">Tabs are easy to tap</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="p3">
+                <label for="p3">Data input forms work</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="p4">
+                <label for="p4">Delete/edit buttons are accessible</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="p5">
+                <label for="p5">Data logs display in scrollable list</label>
+            </div>
+            <div class="note">✓ Test performance with multiple data points</div>
+        </div>
+        
+        <!-- Performance & UX -->
+        <div class="section">
+            <div class="section-title"><span class="emoji">⚡</span>Performance & UX</div>
+            <div class="checklist-item">
+                <input type="checkbox" id="u1">
+                <label for="u1">Page loads quickly (< 3 seconds)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="u2">
+                <label for="u2">Animations are smooth (no jank)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="u3">
+                <label for="u3">No horizontal scrollbars</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="u4">
+                <label for="u4">Touch interactions are responsive</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="u5">
+                <label for="u5">Dark/Light mode works smoothly</label>
+            </div>
+            <div class="note">✓ Check DevTools Performance tab</div>
+        </div>
+        
+        <!-- Orientation & Layout -->
+        <div class="section">
+            <div class="section-title"><span class="emoji">🔄</span>Orientation & Layout</div>
+            <div class="checklist-item">
+                <input type="checkbox" id="o1">
+                <label for="o1">Portrait orientation works</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="o2">
+                <label for="o2">Landscape orientation works</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="o3">
+                <label for="o3">Layout reflows on rotate (no freeze)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="o4">
+                <label for="o4">Notch/safe area is respected</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="o5">
+                <label for="o5">Bottom nav visible in both orientations</label>
+            </div>
+            <div class="note">✓ Test on iPhone 12/13 (notch) and Android</div>
+        </div>
+        
+        <!-- Accessibility -->
+        <div class="section">
+            <div class="section-title"><span class="emoji">♿</span>Accessibility</div>
+            <div class="checklist-item">
+                <input type="checkbox" id="a1">
+                <label for="a1">Touch targets are 44x44px minimum</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="a2">
+                <label for="a2">Color contrast meets WCAG AA</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="a3">
+                <label for="a3">Text is readable (min 14px)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="a4">
+                <label for="a4">No text truncation (unless intentional)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="a5">
+                <label for="a5">Screen reader friendly (if tested)</label>
+            </div>
+            <div class="note">✓ Use WebAIM Contrast Checker</div>
+        </div>
+        
+        <!-- Stats Section -->
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number" id="completed">0</div>
+                <div class="stat-label">Completed</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="total">38</div>
+                <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="percent">0%</div>
+                <div class="stat-label">Progress</div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="button-group">
+            <button class="btn-secondary" onclick="resetAll()">🔄 Reset All</button>
+            <button class="btn-primary" onclick="downloadReport()">📥 Download Report</button>
+        </div>
+    </div>
+    
+    <script>
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const completedEl = document.getElementById('completed');
+        const progressEl = document.getElementById('progress');
+        const percentEl = document.getElementById('percent');
+        const totalEl = document.getElementById('total');
+        
+        function updateProgress() {
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const total = checkboxes.length;
+            const percent = Math.round((checked / total) * 100);
+            
+            completedEl.textContent = checked;
+            totalEl.textContent = total;
+            percentEl.textContent = percent + '%';
+            progressEl.style.width = percent + '%';
+            
+            localStorage.setItem('checklist-state', JSON.stringify(
+                Array.from(checkboxes).map(cb => cb.checked)
+            ));
+        }
+        
+        function resetAll() {
+            if (confirm('Reset all checkboxes?')) {
+                checkboxes.forEach(cb => cb.checked = false);
+                localStorage.removeItem('checklist-state');
+                updateProgress();
+            }
+        }
+        
+        function downloadReport() {
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const total = checkboxes.length;
+            const report = `
+Mobile Testing Report
+====================
+Date: ${new Date().toLocaleDateString()}
+Completion: ${checked}/${total} (${Math.round((checked/total)*100)}%)
+
+Summary:
+- Home Page: ${countChecked(0, 5)}/${5}
+- Login/Signup: ${countChecked(5, 10)}/${5}
+- Nutrition Calculator: ${countChecked(10, 16)}/${6}
+- Progress Tracker: ${countChecked(16, 21)}/${5}
+- Performance & UX: ${countChecked(21, 26)}/${5}
+- Orientation & Layout: ${countChecked(26, 31)}/${5}
+- Accessibility: ${countChecked(31, 38)}/${7}
+
+Status: ${checked === total ? '✅ READY FOR DEPLOYMENT' : '⏳ IN PROGRESS'}
+            `;
+            
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mobile-testing-report.txt';
+            a.click();
+        }
+        
+        function countChecked(start, end) {
+            return Array.from(checkboxes).slice(start, end).filter(cb => cb.checked).length;
+        }
+        
+        // Event listeners
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateProgress);
+        });
+        
+        // Load saved state
+        const saved = localStorage.getItem('checklist-state');
+        if (saved) {
+            const states = JSON.parse(saved);
+            states.forEach((checked, idx) => {
+                checkboxes[idx].checked = checked;
+            });
+        }
+        
+        updateProgress();
+    </script>
+</body>
+</html>
