@@ -1,4 +1,5 @@
-const key = 'REDACTED_API_KEY';
+// Read API key from environment variable to avoid committing secrets
+const key = process.env.VITE_AI_API_KEY || process.env.GROQ_API_KEY || '';
 const payload = {
   model: 'llama-3.3-70b-versatile',
   messages: [
@@ -10,6 +11,9 @@ const payload = {
 
 (async () => {
   try {
+    if (!key) {
+      throw new Error('Missing API key. Set VITE_AI_API_KEY or GROQ_API_KEY in your environment.');
+    }
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
