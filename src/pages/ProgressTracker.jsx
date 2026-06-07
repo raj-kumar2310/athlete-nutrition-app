@@ -809,7 +809,7 @@ export default function ProgressTracker() {
 
   return (
     <div style={{ minHeight: '100vh', background: theme.bg, paddingBottom: 80, transition: 'background 0.3s' }}>
-      <div style={{ maxWidth: 480, margin: '0 auto', padding: '56px 24px 24px' }}>
+      <div style={{ width: '100%', maxWidth: isMobile ? '100%' : 920, margin: '0 auto', padding: isMobile ? '56px 12px 24px' : '56px 24px 24px', boxSizing: 'border-box' }}>
         <button onClick={() => navigate('/home')} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, color: theme.text3, marginBottom: 24, padding: 0 }}>
           <ArrowLeft size={16} /> <span style={{ fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, fontSize: 14 }}>HOME</span>
         </button>
@@ -817,10 +817,30 @@ export default function ProgressTracker() {
         <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 44, fontWeight: 900, color: theme.text, letterSpacing: -1, margin: '0 0 28px' }}>Progress<br /><span style={{ color: '#4FC3F7' }}>Tracker</span></h1>
 
         {/* Tab buttons */}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 24, borderBottom: `1px solid ${theme.border}`, paddingBottom: 16, overflowX: 'auto' }}>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 24, borderBottom: `1px solid ${theme.border}`, paddingBottom: 16, overflowX: 'auto', WebkitOverflowScrolling: 'touch', flexWrap: 'nowrap', alignItems: 'center' }}>
           {tabs.map(tab => (
             <motion.button key={tab.id} onClick={() => setActiveTab(tab.id)} whileTap={{ scale: 0.95 }}
-              style={{ padding: '8px 12px', background: activeTab === tab.id ? `${tab.color}15` : 'transparent', border: activeTab === tab.id ? `2px solid ${tab.color}` : `1px solid transparent`, borderRadius: 10, cursor: 'pointer', fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, fontWeight: 700, letterSpacing: 1, color: activeTab === tab.id ? tab.color : theme.text3, transition: 'all 0.2s', whiteSpace: 'nowrap' }}>
+              style={{
+                padding: isMobile ? '6px 10px' : '8px 12px',
+                background: activeTab === tab.id ? `${tab.color}15` : 'transparent',
+                border: activeTab === tab.id ? (isMobile ? `1px solid ${tab.color}` : `2px solid ${tab.color}`) : `1px solid transparent`,
+                borderRadius: 10,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                flex: '0 0 auto',
+                minWidth: isMobile ? 88 : 'auto',
+                boxSizing: 'border-box',
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontSize: isMobile ? 12 : 13,
+                fontWeight: 700,
+                letterSpacing: 1,
+                color: activeTab === tab.id ? tab.color : theme.text3,
+                transition: 'all 0.2s',
+                whiteSpace: 'nowrap',
+                outline: 'none'
+              }}>
               {tab.label}
             </motion.button>
           ))}

@@ -6,6 +6,7 @@ import {
   Apple, Dumbbell, Clock, ChevronDown, ChevronUp,
 } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
+import { useResponsive } from "../hooks/useResponsive";
 import { useUserStore } from "../stores/userStore";
 import {
   aiConfig,
@@ -35,7 +36,7 @@ function Section({ title, icon, color, children, defaultOpen = false }) {
       </button>
       <AnimatePresence>
       {/* Dev-only debug panel */}
-      {import.meta.env.DEV && debugInfo && (
+      {import.meta.env.DEV && typeof debugInfo !== 'undefined' && debugInfo && (
         <div style={{ position: 'fixed', left: 12, right: 12, bottom: 72, maxHeight: '30vh', overflow: 'auto', background: 'rgba(0,0,0,0.7)', color: '#fff', padding: 8, borderRadius: 8, fontSize: 12, zIndex: 200 }}>
           <div style={{ fontWeight: 700, marginBottom: 6 }}>Debug: last request</div>
           <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{JSON.stringify(debugInfo, null, 2)}</pre>
@@ -89,6 +90,7 @@ export default function InjuryAssistant() {
   const navigate = useNavigate();
   const { name, sport, weight, age, gender } = useUserStore();
   const { bg, bg2, bg3, border, text, text2, text3, input } = useTheme();
+  const { isMobile } = useResponsive();
 
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
@@ -286,7 +288,7 @@ ALWAYS respond with ONLY valid JSON in this exact structure (no markdown, no ext
 
   return (
     <div style={{ minHeight: "100vh", background: bg, paddingBottom: 100, transition: "background 0.3s" }}>
-      <div style={{ maxWidth: 480, margin: "0 auto", padding: "56px 24px 24px" }}>
+      <div style={{ width: '100%', maxWidth: isMobile ? '100%' : 920, margin: "0 auto", padding: isMobile ? '56px 12px 24px' : '56px 24px 24px', boxSizing: 'border-box' }}>
 
         <button onClick={() => navigate("/home")}
           style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, color: text3, marginBottom: 24, padding: 0 }}>
